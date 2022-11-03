@@ -1,17 +1,20 @@
 // eslint-disable-next-line
 import React from "react"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import LoginPage from "./pages/login/loginShop"
+import {publicRoutes} from "./routes"
 
 function App() {
   return (
-    <>
+    <div>
       <Router>
         <Routes>
-          <Route path="/login" exact element={<LoginPage />} />
+          {publicRoutes.map((route, index) => {
+              const Page = route.component
+              return <Route key={index} path={route.path} element={<Page />} />
+          })}
         </Routes>
       </Router>
-    </>
+    </div>
   )
 }
 

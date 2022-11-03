@@ -47,8 +47,13 @@ export const LoginStyles = makeStyles(theme => ({
   inputText: {
     color: 'black',
     fontFamily: 'Helvetica',
-    padding: '1.2rem',
+    padding: '1.2rem 3rem 1.2rem 3rem',
     borderRadius: '2.4rem',
+    marginTop: '2.5rem',
+  },
+  inputRadio:{
+    display: 'flex',
+  
   },
   optionLogin: {
     display: 'flex',
