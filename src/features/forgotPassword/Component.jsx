@@ -1,67 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../../commons/assets/logo.png';
-import { ButtonLogin, LoginStyles } from '../../styles/features/loginStyles';
+import Form from '~/components/Layout/components/Form';
+import Input from '~/components/Input';
+import Button from '~/components/Button';
 
 function ForgotComponent() {
-    const classes = LoginStyles();
+  return (
+    <Form title="FORGOT PASSWORD" height="34rem" titleSize="3.2rem">
+      <div>
+        <Input type="text" placeholder="Username" />
+        <Input type="email" placeholder="Email" />
 
-    return (
-        <div className={classes.root}>
-            <div style={{ width: '100%', textAlign: 'center' }}>
-                <img
-                    src={logo}
-                    alt="logo"
-                    style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        marginTop: '4rem',
-                    }}
-                />
-            </div>
-
-            <form className={classes.loginForm} style={{ height: '32rem' }}>
-                <h1 className={classes.h1Title} style={{ fontSize: '3.2rem' }}>
-                    FORGOT PASSWORD
-                </h1>
-
-                <input
-                    className={classes.inputText}
-                    type="username"
-                    id="username"
-                    placeholder="Username"
-                />
-                <input
-                    className={classes.inputText}
-                    type="email"
-                    id="email"
-                    placeholder="Email"
-                />
-
-                <ButtonLogin>VERIFY</ButtonLogin>
-
-                <span
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginTop: '1rem',
-                    }}
-                >
-                    <Link
-                        to="/login"
-                        style={{
-                            textDecorationLine: 'underline',
-                            cursor: 'pointer',
-                            color: 'black',
-                        }}
-                    >
-                        Go back to sign in
-                    </Link>
-                </span>
-            </form>
-            <div className={classes.bottomSide}></div>
+        <div style={{ marginTop: '2rem' }}>
+          <Button
+            href="/reset-password"
+            primary
+            children="VERIFY"
+            rounded
+            large
+          />
+          <div
+            style={{ with: '100%', display: 'flex', justifyContent: 'center' }}
+          >
+            <Button text href="/login" children="Go back to sign in" />
+          </div>
         </div>
-    );
+      </div>
+    </Form>
+  );
 }
 
 export default ForgotComponent;

@@ -1,6 +1,9 @@
-import { useState } from 'react';
-import './navbar.scss';
-import Subnav from '../subnav/Subnav';
+import { useState, memo } from 'react';
+import Subnav from '../Subnav';
+import classNames from 'classnames/bind';
+import styles from './Navbar.module.scss';
+
+const cx = classNames.bind(styles);
 
 function Navbar() {
   const listItems = [
@@ -122,16 +125,16 @@ function Navbar() {
 
   return (
     <div onMouseOut={() => handleUnHover(1)}>
-      <nav className="nav">
-        <ul className="navbar">
+      <nav className={cx('nav')}>
+        <ul className={cx('navbar')}>
           {listItems.map((item, index) => {
             return (
               <div
                 key={index}
-                className="items"
+                className={cx('items')}
                 onMouseOver={() => handleHover(index)}
               >
-                <li key={index} className="item">
+                <li key={index} className={cx('item')}>
                   {item}
 
                   {index === 1 && <Subnav state={state}></Subnav>}
@@ -145,4 +148,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default memo(Navbar);

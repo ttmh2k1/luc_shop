@@ -1,101 +1,68 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../../commons/assets/logo.png';
-import {
-  ButtonLogin,
-  CheckboxRemember,
-  GoogleLogin,
-  LoginStyles,
-} from '../../styles/features/loginStyles';
-import GoogleIcon from '@mui/icons-material/Google';
+import Form from '~/components/Layout/components/Form';
+import Input from '~/components/Input';
+import Button from '~/components/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
+import classNames from 'classnames/bind';
+import styles from './Login.module.scss';
 
-function LoginShopComponent() {
-  const classes = LoginStyles();
+const cx = classNames.bind(styles);
+
+function LoginComponent() {
   return (
-    <div className={classes.root}>
-      <div style={{ width: '100%', textAlign: 'center' }}>
-        <img
-          src={logo}
-          alt="logo"
+    <Form title="SIGN IN" height="46rem">
+      <div>
+        <Input type="text" placeholder="Username" />
+        <Input type="password" placeholder="Password" />
+        <div
           style={{
-            maxWidth: '100%',
-            height: 'auto',
-            marginTop: '4rem',
-          }}
-        />
-      </div>
-
-      <form className={classes.loginForm} style={{ height: '44rem' }}>
-        <h1 className={classes.h1Title}>SIGN IN</h1>
-
-        <input
-          className={classes.inputText}
-          type="text"
-          id="username"
-          placeholder="Username"
-        />
-
-        <input
-          className={classes.inputText}
-          type="password"
-          id="password"
-          placeholder="Password"
-        />
-        <div className={classes.optionLogin}>
-          <span style={{ display: 'flex', alignItems: 'center' }}>
-            <CheckboxRemember color="default" />
-            <label>Remember password</label>
-          </span>
-          <span>
-            <Link
-              to="/forgot-password"
-              style={{
-                textDecorationLine: 'underline',
-                cursor: 'pointer',
-                color: 'black',
-              }}
-            >
-              Forgot password?
-            </Link>
-          </span>
-        </div>
-        <ButtonLogin>SIGN IN</ButtonLogin>
-        <GoogleLogin
-          startIcon={
-            <GoogleIcon
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-              }}
-            />
-          }
-        >
-          SIGN IN WITH GOOGLE
-        </GoogleLogin>
-
-        <span
-          style={{
+            marginTop: '0.5rem',
+            padding: '0 1rem',
             display: 'flex',
-            justifyContent: 'center',
-            marginTop: '1rem',
+            justifyContent: 'space-between',
           }}
         >
-          <Link
-            to="/register"
-            style={{
-              textDecorationLine: 'underline',
-              cursor: 'pointer',
-              color: 'black',
-            }}
+          <div style={{ margin: '1rem 2rem 0 0' }}>
+            <input type="checkbox" />{' '}
+            <span style={{ color: '#000' }}>Remember account</span>
+          </div>
+          <Button text href="/forgot-password" children="Forgot password" />
+        </div>
+        <div
+          style={{
+            marginTop: '2rem',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Button href="/home" primary children="SIGN IN" rounded large />
+          <div
+            style={{ with: '100%', display: 'flex', justifyContent: 'center' }}
           >
-            Create a new account
-          </Link>
-        </span>
-      </form>
+            <Button
+              text
+              href="/register"
+              children="Create a account? Sign up"
+            />
+          </div>
 
-      <div className={classes.bottomSide}></div>
-    </div>
+          <Button
+            primary
+            href="/register"
+            children="SIGN IN WITH GOOGLE"
+            leftIcon={
+              <FontAwesomeIcon
+                icon={faGooglePlusG}
+                className={cx('icon-google')}
+              />
+            }
+            className={cx('btn-google')}
+            large
+          />
+        </div>
+      </div>
+    </Form>
   );
 }
 
-export default LoginShopComponent;
+export default LoginComponent;

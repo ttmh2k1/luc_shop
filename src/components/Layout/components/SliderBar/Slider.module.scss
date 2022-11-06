@@ -3,7 +3,7 @@
   width: 100%;
   height: 48rem;
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
   margin-top: 3.4rem;
 
   .slider-content {
@@ -11,7 +11,7 @@
     height: 100%;
     position: absolute;
     width: 100%;
-    transition: transform 1s;
+    // transition: transform 1s;
 
     .slider-item {
       max-width: 100%;
@@ -20,7 +20,7 @@
       top: 0;
       left: 0;
       position: absolute;
-      transition: transform 1s;
+      // transition: transform 1s;
 
       .slider-product-layer {
         position: absolute;
@@ -111,5 +111,25 @@
       top: 20rem;
       right: 5rem;
     }
+  }
+}
+
+.btn-explore {
+  border-color: #fff;
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.btn-buy-now {
+  background-color: #fff;
+  color: #000;
+  border-color: #fff;
+
+  &:hover {
+    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9);
   }
 }
