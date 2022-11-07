@@ -4,7 +4,7 @@ import {
   faChevronRight,
   faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Slider.module.scss';
 
@@ -45,18 +45,18 @@ function SliderBar() {
     },
   ];
 
+  const sourceSize = sourcePhoto.length;
   const photos = [sourcePhoto[state]];
   if (state === 0) {
-    photos.push(sourcePhoto[1]);
-    photos.unshift(sourcePhoto[3]);
-  } else if (state === sourcePhoto.length - 1) {
+    photos.push(sourcePhoto[state + 1]);
+    photos.unshift(sourcePhoto[sourceSize - 1]);
+  } else if (state === sourceSize - 1) {
     photos.push(sourcePhoto[0]);
-    photos.unshift(sourcePhoto[2]);
+    photos.unshift(sourcePhoto[state - 1]);
   } else {
     photos.push(sourcePhoto[state + 1]);
     photos.unshift(sourcePhoto[state - 1]);
   }
-  console.log(state);
   const sizeList = photos.length;
 
   const handleClickNext = () => {

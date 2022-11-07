@@ -1,11 +1,12 @@
 import Header from '~/components/Layout/components/Header';
 import Footer from '~/components/Layout/components/Footer';
+import Menu from '~/components/Layout/components/Menu';
 import classNames from 'classnames/bind';
-import styles from './DefaultLayout.module.scss';
+import styles from './ProductLayout.module.scss';
 
 const cx = classNames.bind(styles);
 
-function DefaultLayout({ children }) {
+function ProductLayout({ children }) {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('header')}>
@@ -13,6 +14,9 @@ function DefaultLayout({ children }) {
       </div>
 
       <div className={cx('container')}>
+        <div className={cx('menu')}>
+          <Menu />
+        </div>
         <div className={cx('content')}> {children}</div>
       </div>
 
@@ -23,4 +27,4 @@ function DefaultLayout({ children }) {
   );
 }
 
-export default DefaultLayout;
+export default ProductLayout;

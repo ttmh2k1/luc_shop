@@ -20,6 +20,7 @@ import {
   DefaultLayout,
   BackgroundLayout,
   HomeLayout,
+  ProductLayout,
 } from '~/components/Layout';
 
 //Public routes
@@ -37,11 +38,11 @@ const publicRoutes = [
     layout: BackgroundLayout,
   },
   { path: '/home', component: HomePage, layout: HomeLayout },
-  { path: '/men', component: MenPage, layout: DefaultLayout },
-  { path: '/women', component: WomenPage, layout: DefaultLayout },
-  { path: '/sale', component: SalePage, layout: DefaultLayout },
-  { path: '/new-arrival', component: NewArrivalPage, layout: DefaultLayout },
-  { path: '/best-seller', component: BestSellerPage, layout: DefaultLayout },
+  { path: '/men', component: MenPage, layout: ProductLayout },
+  { path: '/women', component: WomenPage, layout: ProductLayout },
+  { path: '/sale', component: SalePage, layout: ProductLayout },
+  { path: '/new-arrival', component: NewArrivalPage, layout: ProductLayout },
+  { path: '/best-seller', component: BestSellerPage, layout: ProductLayout },
   { path: '/search', component: SearchPage, layout: DefaultLayout },
   { path: '/contact', component: ContactPage, layout: DefaultLayout },
   {

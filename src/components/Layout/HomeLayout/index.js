@@ -1,5 +1,6 @@
 import Header from '~/components/Layout/components/Header';
 import Slider from '~/components/Layout/components/SliderBar';
+import Footer from '~/components/Layout/components/Footer';
 import classNames from 'classnames/bind';
 import styles from './HomeLayout.module.scss';
 
@@ -15,6 +16,10 @@ function HomeLayout({ children }) {
       <div className={cx('container')}>
         <Slider />
         <div className={cx('content')}> {children}</div>
+      </div>
+
+      <div className={cx('footer')}>
+        <Footer />
       </div>
     </div>
   );
