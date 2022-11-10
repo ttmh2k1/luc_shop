@@ -97,11 +97,9 @@ function ListProduct({
       ...doubleProduct.slice(state + 1, state + 5),
     ];
   }
-  console.log(state);
-  console.log(productListFormat);
 
   const handleClickNext = () => {
-    productRef.current.style.transition = 'transform 0.5s';
+    productRef.current.style.transition = 'transform 0.3s';
     productRef.current.style.transform = `translateX(-51.55%) translateX(0px)`;
     nextProduct();
   };
@@ -121,7 +119,7 @@ function ListProduct({
   };
 
   const handleClickBack = () => {
-    productRef.current.style.transition = 'transform 0.5s';
+    productRef.current.style.transition = 'transform 0.3s';
     productRef.current.style.transform = `translateX(0) translateX(0px)`;
     prevProduct();
   };
@@ -146,9 +144,9 @@ function ListProduct({
         <div className={cx('content')} ref={productRef}>
           {productListFormat.map((product, index) => {
             return (
-              <div key={index} className={cx('product')}>
+              <a href="/product-details" key={index} className={cx('product')}>
                 <ProductItem product={product} />
-              </div>
+              </a>
             );
           })}
         </div>

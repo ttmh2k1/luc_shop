@@ -1,5 +1,5 @@
 import Header from '~/components/Layout/components/Header';
-import Slider from '~/components/Layout/components/SliderBar';
+import Slider from '~/components/Layout/components/Slider';
 import Footer from '~/components/Layout/components/Footer';
 import classNames from 'classnames/bind';
 import styles from './HomeLayout.module.scss';

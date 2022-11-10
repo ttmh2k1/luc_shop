@@ -15,17 +15,22 @@ function AccountMenu({ className }) {
     <div className={classes}>
       <div className={cx('container')}>
         <ul className={cx('content')}>
-          <li className={cx('item')}>
-            <FontAwesomeIcon icon={faUser} className={cx('icon')} />
-            <span className={cx('text')}>Profile</span>
-          </li>
-          <li className={cx('item')}>
-            <FontAwesomeIcon
-              icon={faArrowRightFromBracket}
-              className={cx('icon')}
-            />
-            <span className={cx('text')}>Sign out</span>
-          </li>
+          <a href="/profile">
+            <li className={cx('item')}>
+              <FontAwesomeIcon icon={faUser} className={cx('icon')} />
+
+              <span className={cx('text')}>Profile</span>
+            </li>
+          </a>
+          <a href="/">
+            <li className={cx('item')}>
+              <FontAwesomeIcon
+                icon={faArrowRightFromBracket}
+                className={cx('icon')}
+              />
+              <span className={cx('text')}>Sign out</span>
+            </li>
+          </a>
         </ul>
       </div>
     </div>

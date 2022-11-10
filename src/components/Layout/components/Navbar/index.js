@@ -7,13 +7,34 @@ const cx = classNames.bind(styles);
 
 function Navbar() {
   const listItems = [
-    'Home',
-    'Men',
-    'Women',
-    'Sale',
-    'New Arrival',
-    'Best Seller',
-    'Contact',
+    {
+      name: 'Home',
+      href: '/',
+    },
+    {
+      name: 'Men',
+      href: '/men',
+    },
+    {
+      name: 'Women',
+      href: '/women',
+    },
+    {
+      name: 'Sale',
+      href: '/sale',
+    },
+    {
+      name: 'New Arrival',
+      href: '/new-arrival',
+    },
+    {
+      name: 'Best Seller',
+      href: '/best-seller',
+    },
+    {
+      name: 'Contact',
+      href: '/contact',
+    },
   ];
 
   const listCategoriesMen = [
@@ -89,34 +110,64 @@ function Navbar() {
   ];
 
   const [state, setState] = useState({
-    list: listCategoriesMen,
-    isShow: false,
+    subnavMen: {
+      list: listCategoriesMen,
+      isShow: false,
+    },
+    subnavWomen: {
+      list: listCategoriesWomen,
+      isShow: false,
+    },
   });
 
   const handleHover = (index) => {
     if (index === 1) {
       return setState({
-        list: listCategoriesMen,
-        isShow: true,
+        subnavMen: {
+          list: listCategoriesMen,
+          isShow: true,
+        },
+        subnavWomen: {
+          list: listCategoriesWomen,
+          isShow: false,
+        },
       });
     } else if (index === 2) {
       return setState({
-        list: listCategoriesWomen,
-        isShow: true,
+        subnavMen: {
+          list: listCategoriesMen,
+          isShow: false,
+        },
+        subnavWomen: {
+          list: listCategoriesWomen,
+          isShow: true,
+        },
       });
     }
 
     return setState({
-      ...state,
-      isShow: false,
+      subnavMen: {
+        list: listCategoriesMen,
+        isShow: false,
+      },
+      subnavWomen: {
+        list: listCategoriesWomen,
+        isShow: false,
+      },
     });
   };
 
   const handleUnHover = (index) => {
     if (index === 1 || index === 2) {
       return setState({
-        ...state,
-        isShow: false,
+        subnavMen: {
+          list: listCategoriesMen,
+          isShow: false,
+        },
+        subnavWomen: {
+          list: listCategoriesWomen,
+          isShow: false,
+        },
       });
     }
 
@@ -130,14 +181,16 @@ function Navbar() {
           {listItems.map((item, index) => {
             return (
               <div
+                // to={item.href}
                 key={index}
                 className={cx('items')}
                 onMouseOver={() => handleHover(index)}
               >
                 <li key={index} className={cx('item')}>
-                  {item}
+                  <a href={item.href}>{item.name}</a>
 
-                  {index === 1 && <Subnav state={state}></Subnav>}
+                  {index === 1 && <Subnav state={state.subnavMen}></Subnav>}
+                  {index === 2 && <Subnav state={state.subnavWomen}></Subnav>}
                 </li>
               </div>
             );

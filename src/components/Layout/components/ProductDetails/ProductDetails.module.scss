@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .container {
@@ -11,6 +11,12 @@
 .content {
   display: flex;
   width: 100%;
-  justify-content: content;
+  justify-content: center;
   gap: 1rem;
+}
+
+.evaluate {
+  width: 100%;
+  margin-top: 4rem;
+  border-top: solid 1px #aaa;
 }

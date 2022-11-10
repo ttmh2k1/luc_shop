@@ -196,6 +196,7 @@ function PageProduct({
         'https://cdn.shopify.com/s/files/1/1236/1344/products/vi-da-nam-card-retro-leonardo-ec06_300x.png?v=1640577488',
     },
   ],
+  className,
 }) {
   const [state, setState] = useState(0);
   const PAGE_SIZE = 6;
@@ -216,14 +217,18 @@ function PageProduct({
       return setState(pageCount);
     }
   };
+
+  const classes = cx('content', {
+    [className]: className,
+  });
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
-        <div className={cx('content')}>
+        <div className={cx(classes)}>
           <ProductSession
             listProduct={listProduct.slice(
               state * PAGE_SIZE,
-              state * PAGE_SIZE + 6,
+              state * PAGE_SIZE + PAGE_SIZE,
             )}
           />
         </div>

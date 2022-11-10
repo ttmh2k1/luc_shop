@@ -60,7 +60,7 @@ function SliderBar() {
   const sizeList = photos.length;
 
   const handleClickNext = () => {
-    imageRef.current.style.transition = 'transform 1s';
+    imageRef.current.style.transition = 'transform 0.5s';
     imageRef.current.style.transform = `translateX(-${100}%)`;
     nextSlide();
   };
@@ -74,14 +74,14 @@ function SliderBar() {
           return 0;
         }
       });
-      console.log('tranform');
+
       imageRef.current.style.transition = 'transform 0s';
       imageRef.current.style.transform = `translateX(0%)`;
-    }, 1000);
+    }, 3000);
   };
 
   const handleClickBack = () => {
-    imageRef.current.style.transition = 'transform 1s';
+    imageRef.current.style.transition = 'transform 0.5s';
     imageRef.current.style.transform = `translateX(${100}%)`;
 
     prevSlide();
@@ -100,6 +100,10 @@ function SliderBar() {
       imageRef.current.style.transform = `translateX(0%)`;
     }, 1000);
   };
+
+  // useEffect(() => {
+  //   handleClickNext();
+  // }, [state]);
 
   return (
     <div className={cx('wrapper')}>

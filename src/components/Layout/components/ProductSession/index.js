@@ -10,9 +10,9 @@ function ProductSession({ listProduct = [] }) {
       <div className={cx('container')}>
         {listProduct.map((product, index) => {
           return (
-            <div className={cx('item')} key={index}>
+            <a href="/product-details" className={cx('item')} key={index}>
               <ProductItem product={product} />
-            </div>
+            </a>
           );
         })}
       </div>

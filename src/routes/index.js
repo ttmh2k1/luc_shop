@@ -11,16 +11,18 @@ import BestSellerPage from '../pages/product/bestSeller';
 import SearchPage from '../pages/product/search';
 import ContactPage from '../pages/contact/contact';
 import ProductDetailsPage from '../pages/productDetails/productDetails';
-import CartDetailsPage from '../pages/cart/cartDetails';
-import PaymentPage from '../pages/cart/payment';
+import CartPage from '../pages/cart/cart';
 import ProfilePage from '../pages/account/profile';
+import AddressPage from '../pages/account/address';
 import ChangePasswordPage from '../pages/account/changePassword';
 import OrderHistoryPage from '../pages/account/orderHistory';
+import NotifyPage from '../pages/account/notify';
 import {
   DefaultLayout,
   BackgroundLayout,
   HomeLayout,
   ProductLayout,
+  AccountLayout,
 } from '~/components/Layout';
 
 //Public routes
@@ -37,7 +39,7 @@ const publicRoutes = [
     component: ResetPasswordPage,
     layout: BackgroundLayout,
   },
-  { path: '/home', component: HomePage, layout: HomeLayout },
+  { path: '/', component: HomePage, layout: HomeLayout },
   { path: '/men', component: MenPage, layout: ProductLayout },
   { path: '/women', component: WomenPage, layout: ProductLayout },
   { path: '/sale', component: SalePage, layout: ProductLayout },
@@ -50,15 +52,28 @@ const publicRoutes = [
     component: ProductDetailsPage,
     layout: DefaultLayout,
   },
-  { path: '/cart-details', component: CartDetailsPage, layout: DefaultLayout },
-  { path: '/payment', component: PaymentPage, layout: DefaultLayout },
-  { path: '/profile', component: ProfilePage, layout: DefaultLayout },
+  { path: '/cart', component: CartPage, layout: DefaultLayout },
+  { path: '/profile', component: ProfilePage, layout: AccountLayout },
   {
     path: '/change-password',
     component: ChangePasswordPage,
-    layout: DefaultLayout,
+    layout: AccountLayout,
   },
-  { path: '/oder-history', component: OrderHistoryPage, layout: DefaultLayout },
+  {
+    path: '/address',
+    component: AddressPage,
+    layout: AccountLayout,
+  },
+  {
+    path: '/history-order',
+    component: OrderHistoryPage,
+    layout: AccountLayout,
+  },
+  {
+    path: '/notify',
+    component: NotifyPage,
+    layout: AccountLayout,
+  },
 ];
 
 //Private routes
