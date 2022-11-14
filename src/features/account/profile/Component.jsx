@@ -1,22 +1,128 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { login } from '~/ActionCreators/UserCreator';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
+import * as userAPI from '~/api/userApi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import DefaultAvatar from '~/commons/assets/default-avt.png';
 import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
+import swal from 'sweetalert';
+import cookies from 'react-cookies';
 
 const cx = classNames.bind(styles);
 
-function ProfileComponent({
-  user = {
-    username: 'kiet123nguyen',
-    fullname: 'Kiet Nguyen',
-    email: 'kiet123nguyen@gmail.com',
-    phone: '09345943985',
-    gender: 'male',
-    birthday: '2002-03-04',
-    avt: 'https://i.pinimg.com/736x/1c/ca/24/1cca24df3c875c58cf0a872350637007.jpg',
-  },
-}) {
+function ProfileComponent() {
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [fullname, setFullname] = useState(user.fullname);
+  const [username, setUsername] = useState(user.username);
+  const [phone, setPhone] = useState(user.phone);
+  const [email, setEmail] = useState(user.email);
+  const [gender, setGender] = useState(user.gender);
+  const [birthday, setBirthday] = useState(
+    user.dob ? user.dob.split(' ')[0] : '2022-01-01',
+  );
+  const [avatar, setAvatar] = useState(user.avatar);
+  const [otp, setOtp] = useState('');
+
+  const [editUsername, setEditUsername] = useState(false);
+  const [editEmail, setEditEmail] = useState(false);
+  const [editPhone, setEditPhone] = useState(false);
+
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files[0];
+
+    setAvatar(URL.createObjectURL(file));
+  };
+
+  useEffect(() => {
+    return () => {
+      avatar && URL.revokeObjectURL(avatar);
+    };
+  }, [avatar]);
+
+  const sendOTP = async (e) => {
+    e.preventDefault();
+    const emailOTP = async () => {
+      const result = await userAPI.currentEmailOTP();
+
+      if (result) {
+        swal('OTP was sended!', 'Let submit OTP code!', 'success');
+      } else {
+        swal('Connect email failed!', 'Please try again!', 'error');
+      }
+    };
+    const phoneOTP = async () => {
+      const result = await userAPI.currentPhoneOTP();
+
+      if (result) {
+        swal('OTP was sended!', 'Let submit OTP code!', 'success');
+      } else {
+        swal('Connect phone failed!', 'Please try again!', 'error');
+      }
+    };
+
+    if (editEmail && email !== user.email) {
+      phoneOTP();
+    } else if (editPhone && phone !== user.phone) {
+      emailOTP();
+    } else {
+      swal(
+        "Can't send OTP when you don't update email or phone",
+        'You can change profile without OTP!',
+        'warning',
+      );
+    }
+  };
+
+  const updateProfile = (e) => {
+    e.preventDefault();
+
+    const update = async () => {
+      const obj = {
+        fullname: fullname,
+        username: username,
+        email: email !== user.email ? email : null,
+        phone: phone !== user.phone ? phone : null,
+        gender: gender,
+        dob: birthday,
+        otp: otp,
+      };
+      const json = JSON.stringify(obj);
+      const blob = new Blob([json], {
+        type: 'application/json',
+      });
+      const data = new FormData();
+      data.append('info', blob);
+      // data.append("avatar", avatar); // file avatar nếu có k thì k có dòng này
+
+      const result = await userAPI.updateProfile(data);
+
+      console.log(result);
+      if (result) {
+        cookies.remove('user');
+        console.log(result);
+        cookies.save('user', result);
+
+        dispatch(login(result));
+        navigate(0);
+        swal('Change profile successful!!', '', 'success');
+      } else {
+        swal('Failed!!', '', 'error');
+      }
+    };
+
+    update();
+  };
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -25,10 +131,27 @@ function ProfileComponent({
         </div>
         <div className={cx('content')}>
           <div className={cx('profile')}>
-            <form>
+            <form onSubmit={(e) => updateProfile(e)}>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Username</span>
-                <span className={cx('username')}>{user.username}</span>
+                {editUsername ? (
+                  <Input
+                    type={'text'}
+                    placeholder={'Username'}
+                    className={cx('input')}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                ) : (
+                  <span className={cx('username')}>{username}</span>
+                )}
+                {!editUsername && (
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className={cx('icon')}
+                    onClick={() => setEditUsername(true)}
+                  />
+                )}
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Full name</span>
@@ -36,47 +159,106 @@ function ProfileComponent({
                   type={'text'}
                   placeholder={'Full name'}
                   className={cx('input')}
-                  value={user.fullname}
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
                 />
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Email</span>
-                <Input
-                  type={'email'}
-                  placeholder={'Email'}
-                  className={cx('input')}
-                  value={user.email}
-                />
+                {editEmail ? (
+                  <Input
+                    type={'email'}
+                    placeholder={'Email'}
+                    className={cx('input')}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                ) : (
+                  <span className={cx('username')}>{email}</span>
+                )}
+                {!editEmail && (
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className={cx('icon')}
+                    onClick={() =>
+                      setEditEmail(() => {
+                        if (!phone) {
+                          swal(
+                            "Can't change Email!",
+                            'Please add a phone!',
+                            'warning',
+                          );
+                          return false;
+                        } else if (editPhone) {
+                          swal(
+                            "Can't change Email!",
+                            'Only change email or phone!',
+                            'warning',
+                          );
+                          return false;
+                        }
+                        return true;
+                      })
+                    }
+                  />
+                )}
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Phone number</span>
-                <Input
-                  value={user.phone}
-                  type={'text'}
-                  placeholder={'Phone number'}
-                  className={cx('input')}
-                />
+                {editPhone ? (
+                  <Input
+                    value={phone ? phone : ''}
+                    onChange={(e) => setPhone(e.target.value)}
+                    type={'text'}
+                    placeholder={'Phone number'}
+                    className={cx('input')}
+                  />
+                ) : (
+                  <span className={cx('username')}>{phone}</span>
+                )}
+                {!editPhone && (
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className={cx('icon')}
+                    onClick={() =>
+                      setEditPhone(() => {
+                        if (editEmail === true) {
+                          swal(
+                            "Can't change Phone!",
+                            'Only change email or phone!',
+                            'warning',
+                          );
+                          return false;
+                        }
+
+                        return true;
+                      })
+                    }
+                  />
+                )}
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Gender</span>
                 <div className={cx('radio-gender')}>
-                  <Input
+                  <input
                     name={'gender'}
                     id={'male'}
-                    value={'Male'}
+                    value={'MALE'}
                     type={'radio'}
-                    checked={user.gender === 'male' && true}
+                    checked={gender === 'MALE' && true}
+                    onChange={(e) => setGender(e.target.value)}
                     className={cx('input')}
                   />
                   <span className={cx('radio-label')}>Male</span>
                 </div>
                 <div className={cx('radio-gender')}>
-                  <Input
+                  <input
                     name={'gender'}
                     id={'female'}
-                    value={'Female'}
+                    value={'FEMALE'}
                     type={'radio'}
-                    checked={user.gender === 'female' && true}
+                    checked={gender === 'FEMALE' && true}
+                    onChange={(e) => setGender(e.target.value)}
                     className={cx('input')}
                   />
                   <span className={cx('radio-label')}>Female</span>
@@ -86,19 +268,39 @@ function ProfileComponent({
                 <span className={cx('label')}>Birthday</span>
                 <Input
                   type={'date'}
-                  value={user.birthday}
+                  value={birthday ? birthday : '2001-01-01'}
+                  onChange={(e) => setBirthday(e.target.value)}
                   className={cx('input')}
                 />
               </div>
+
+              {(editPhone || editEmail) && (
+                <div className={cx('verify')}>
+                  <Input
+                    type="text"
+                    placeholder="OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className={cx('input')}
+                  />
+                  <Button
+                    className={cx('btn')}
+                    onClick={(e) => sendOTP(e)}
+                    primary
+                    children="SEND OTP"
+                  />
+                </div>
+              )}
+
               <div className={cx('save')}>
                 <Button primary children={'SAVE'} className={cx('btn-save')} />
               </div>
             </form>
           </div>
           <div className={cx('avatar')}>
-            <img src={user.avt} alt="" />
+            <img src={avatar ? avatar : DefaultAvatar} alt="" />
             <div className={cx('upload')}>
-              <input type="file" />
+              <input type="file" onChange={handlePreviewAvatar} />
             </div>
           </div>
         </div>

@@ -1,54 +1,117 @@
-import Form from '~/components/Layout/components/Form';
+import { useState, useEffect } from 'react';
+import { login as loginAction } from '~/ActionCreators/UserCreator';
+import cookies from 'react-cookies';
+import Form from '~/Layout/components/Form';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as userAPI from '~/api/userApi';
+import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
 
 function LoginComponent() {
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const token = searchParams.get('token');
+
+  const getUser = async () => {
+    const result = await userAPI.currentUser();
+    if (result) {
+      swal('Login Success!', 'Click oke!', 'success');
+      cookies.save('user', result);
+      dispatch(loginAction(result));
+    } else {
+      swal('Failed Login!', 'Try again!', 'error');
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      cookies.save('token', token);
+      getUser();
+      swal('Login Success!', 'Click oke!', 'success');
+      navigate('/');
+    }
+    return () => {};
+  }, []);
+
+  const login = async (e) => {
+    e.preventDefault();
+
+    const result = await userAPI.login(username, password);
+    if (result) {
+      swal('Login Success!', 'Click oke!', 'success');
+      cookies.save('token', result.token);
+      cookies.save('user', result.userInfo);
+
+      dispatch(loginAction(result.userInfo));
+      navigate('/');
+    } else {
+      swal('Failed Login!', 'Try again!', 'error');
+    }
+  };
+
   return (
-    <Form title="SIGN IN" height="46rem">
-      <div>
-        <Input type="text" placeholder="Username" />
-        <Input type="password" placeholder="Password" />
-        <div
-          style={{
-            marginTop: '0.5rem',
-            padding: '0 1rem',
-            display: 'flex',
-            justifyContent: 'space-between',
+    <Form title="SIGN IN" height="46rem" onSubmit={(e) => login(e)}>
+      <div className={cx('content')}>
+        <Input
+          type="text"
+          placeholder="Username, or phone, or email"
+          value={username}
+          onChange={(e) => {
+            setUserName(e.target.value);
           }}
-        >
-          <div style={{ margin: '1rem 2rem 0 0' }}>
-            <input type="checkbox" />{' '}
-            <span style={{ color: '#000' }}>Remember account</span>
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        <div className={cx('under-content')}>
+          <div className={cx('checkbox')}>
+            <input type="checkbox" /> <span>Remember account</span>
           </div>
-          <Button text href="/forgot-password" children="Forgot password" />
+          <Button
+            text
+            href="/forgot-password"
+            children="Forgot password"
+            style={{ color: '#000' }}
+          />
         </div>
-        <div
-          style={{
-            marginTop: '2rem',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Button href="/home" primary children="SIGN IN" rounded large />
-          <div
-            style={{ with: '100%', display: 'flex', justifyContent: 'center' }}
-          >
+        <div className={cx('btn')}>
+          <Button
+            primary
+            children="SIGN IN"
+            rounded
+            large
+            // onClick={(e) => login(e)}
+          />
+          <div className={cx('sign-up')}>
             <Button
               text
               href="/register"
               children="Create a account? Sign up"
+              style={{ color: '#000' }}
             />
           </div>
 
           <Button
             primary
-            href="/register"
+            href="http://localhost:8080/oauth2/authorization/google"
             children="SIGN IN WITH GOOGLE"
             leftIcon={
               <FontAwesomeIcon

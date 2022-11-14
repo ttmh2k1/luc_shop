@@ -1,5 +1,5 @@
 import React from 'react';
-import ListNotify from '~/components/Layout/components/ListNotify';
+import ListNotify from '~/Layout/components/ListNotify';
 import classNames from 'classnames/bind';
 import styles from './Notify.module.scss';
 

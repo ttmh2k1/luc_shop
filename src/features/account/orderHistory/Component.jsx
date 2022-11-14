@@ -1,12 +1,23 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Input from '~/components/Input';
-import ListOrder from '~/components/Layout/components/ListOrder';
+import * as orderAPI from '~/api/orderApi';
+import ListOrder from '~/Layout/components/ListOrder';
 import classNames from 'classnames/bind';
 import styles from './OrderHistory.module.scss';
 
 const cx = classNames.bind(styles);
 
 function OrderHistoryComponent() {
+  const [listOrder, setListOrder] = useState([]);
+  const getListOrder = async () => {
+    const result = await orderAPI.getOrder();
+    console.log(result);
+    setListOrder(result);
+  };
+  useEffect(() => {
+    getListOrder();
+  }, []);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -31,7 +42,7 @@ function OrderHistoryComponent() {
           </form>
         </div>
         <div className={cx('content')}>
-          <ListOrder />
+          <ListOrder listOrder={listOrder} />
         </div>
       </div>
     </div>

@@ -1,9 +1,15 @@
-import React from 'react';
-
 import HomeComponent from '../../features/home/Component';
 
 function Home() {
-    return <HomeComponent/>;
+  // useEffect(() => {
+  //   const fetchApi = async () => {
+  //     const result = await loginApi.login();
+  //   };
+
+  //   fetchApi();
+  // }, []);
+
+  return <HomeComponent />;
 }
 
 export default Home;
