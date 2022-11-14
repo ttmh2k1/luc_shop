@@ -1,64 +1,131 @@
-import React from "react";
-import logo from "../../commons/assets/logo.png";
-import {
-  ButtonLogin,
-  CheckboxRemember,
-  GoogleLogin,
-  LoginStyles,
-} from "../../styles/features/loginStyles";
-import GoogleIcon from "@mui/icons-material/Google";
+import { useState, useEffect } from 'react';
+import { login as loginAction } from '~/ActionCreators/UserCreator';
+import cookies from 'react-cookies';
+import Form from '~/Layout/components/Form';
+import Input from '~/components/Input';
+import Button from '~/components/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGooglePlusG } from '@fortawesome/free-brands-svg-icons';
+import classNames from 'classnames/bind';
+import styles from './Login.module.scss';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as userAPI from '~/api/userApi';
+import swal from 'sweetalert';
 
-function LoginShopComponent() {
-  const classes = LoginStyles();
+const cx = classNames.bind(styles);
+
+function LoginComponent() {
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const token = searchParams.get('token');
+
+  const getUser = async () => {
+    const result = await userAPI.currentUser();
+    if (result) {
+      swal('Login Success!', 'Click oke!', 'success');
+      cookies.save('user', result);
+      dispatch(loginAction(result));
+    } else {
+      swal('Failed Login!', 'Try again!', 'error');
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      cookies.save('token', token);
+      getUser();
+      swal('Login Success!', 'Click oke!', 'success');
+      navigate('/');
+    }
+    return () => {};
+  }, []);
+
+  const login = async (e) => {
+    e.preventDefault();
+
+    const result = await userAPI.login(username, password);
+    if (result) {
+      swal('Login Success!', 'Click oke!', 'success');
+      cookies.save('token', result.token);
+      cookies.save('user', result.userInfo);
+
+      dispatch(loginAction(result.userInfo));
+      navigate('/');
+    } else {
+      swal('Failed Login!', 'Try again!', 'error');
+    }
+  };
+
   return (
-    <div className={classes.root}>
-      <div style={{ width: "100%", textAlign: "center" }}>
-        <img
-          src={logo}
-          alt="logo"
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-            marginTop: "4rem"
+    <Form title="SIGN IN" height="46rem" onSubmit={(e) => login(e)}>
+      <div className={cx('content')}>
+        <Input
+          type="text"
+          placeholder="Username, or phone, or email"
+          value={username}
+          onChange={(e) => {
+            setUserName(e.target.value);
           }}
         />
-      </div>
-
-      <form className={classes.loginForm}>
-        <h1 className={classes.h1Title}>SIGN IN</h1>
-        <label className={classes.labelText} htmlFor="username">
-          Username
-        </label>
-        <input className={classes.inputText} type="text" id="username" />
-        <label className={classes.labelText} htmlFor="password">
-          Password
-        </label>
-        <input className={classes.inputText} type="password" id="password" />
-        <div className={classes.optionLogin}>
-          <span style={{ display: "flex", alignItems: "center" }}>
-            <CheckboxRemember color="default" />
-            <label>Remember password</label>
-          </span>
-          <span>
-            <label style={{ textDecorationLine: "underline" }}>
-              Forget password?
-            </label>
-          </span>
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        <div className={cx('under-content')}>
+          <div className={cx('checkbox')}>
+            <input type="checkbox" /> <span>Remember account</span>
+          </div>
+          <Button
+            text
+            href="/forgot-password"
+            children="Forgot password"
+            style={{ color: '#000' }}
+          />
         </div>
-        <ButtonLogin>SIGN IN</ButtonLogin>
-        <GoogleLogin
-          startIcon={
-            <GoogleIcon
-              style={{ display: "flex", justifyContent: "flex-start" }}
+        <div className={cx('btn')}>
+          <Button
+            primary
+            children="SIGN IN"
+            rounded
+            large
+            // onClick={(e) => login(e)}
+          />
+          <div className={cx('sign-up')}>
+            <Button
+              text
+              href="/register"
+              children="Create a account? Sign up"
+              style={{ color: '#000' }}
             />
-          }
-        >
-          SIGN IN WITH GOOGLE
-        </GoogleLogin>
-      </form>
-      <div className={classes.bottomSide}></div>
-    </div>
+          </div>
+
+          <Button
+            primary
+            href="http://localhost:8080/oauth2/authorization/google"
+            children="SIGN IN WITH GOOGLE"
+            leftIcon={
+              <FontAwesomeIcon
+                icon={faGooglePlusG}
+                className={cx('icon-google')}
+              />
+            }
+            className={cx('btn-google')}
+            large
+          />
+        </div>
+      </div>
+    </Form>
   );
 }
 
-export default LoginShopComponent;
+export default LoginComponent;

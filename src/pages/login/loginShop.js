@@ -1,9 +1,9 @@
 import React from 'react';
 
-import LoginComponent from '../../features/login/Component';
+import LoginComponent from '~/features/login/Component';
 
 function Login() {
-    return <LoginComponent/>;
+  return <LoginComponent />;
 }
 
 export default Login;

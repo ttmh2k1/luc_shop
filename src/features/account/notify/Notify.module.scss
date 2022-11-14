@@ -1,0 +1,13 @@
+.wrapper {
+  color: #000;
+  padding: 2rem 3rem;
+  background-color: rgb(246, 244, 244);
+  margin: 4rem 0;
+  width: 100rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
