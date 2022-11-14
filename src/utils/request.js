@@ -24,8 +24,8 @@ export let endpoints = {
 };
 
 const request = axios.create({
-  // baseURL: 'http://localhost:8080/api/',
-  baseURL: 'http://mighty-birds-know-118-71-222-255.loca.lt/api/',
+  baseURL: 'http://localhost:8080/api/',
+  // baseURL: 'http://mighty-birds-know-118-71-222-255.loca.lt/api/',
 });
 
 export const get = async (path, options = []) => {

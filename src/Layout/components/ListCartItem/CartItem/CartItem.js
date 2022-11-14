@@ -85,13 +85,7 @@ function CartItem({ product = {} }) {
               product.productVariation.discount > 0 ? cx('old-price') : cx('')
             }
           >
-            {commas(
-              (
-                (product.productVariation.price * 100) /
-                (100 - product.productVariation.discount)
-              ).toFixed(0) + '',
-            )}{' '}
-            VND
+            {commas(product.productVariation.price.toFixed(0) + '')} VND
           </span>
           {product.productVariation.discount > 0 && (
             <span className={cx('sale-price')}>

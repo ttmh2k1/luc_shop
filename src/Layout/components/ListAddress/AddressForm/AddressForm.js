@@ -28,7 +28,7 @@ const AddressForm = ({ title = '', size = 0 }) => {
   const [district, setDistrict] = useState(0);
   const [ward, setWard] = useState(0);
   const [addressDetail, setAdressDetail] = useState('');
-  const isDefault = !(size > 0);
+  const isDefault = size > 0 ? false : true;
 
   console.log('city ' + city + ' District ' + district + ' ward ' + ward);
 

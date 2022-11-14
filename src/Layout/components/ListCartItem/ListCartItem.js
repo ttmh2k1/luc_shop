@@ -20,9 +20,12 @@ function ListCartItem({ listItems }) {
   }, [listItems]);
 
   const total = state
-    .map((item) => {
-      return item.productVariation.price * item.quantity;
-    })
+    .map(
+      (item) =>
+        item.productVariation.price *
+        (1 - item.productVariation.discount / 100) *
+        item.quantity,
+    )
     .reduce((acc, item) => acc + item, 0);
 
   const removeCart = async (id) => {

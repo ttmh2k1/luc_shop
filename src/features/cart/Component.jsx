@@ -40,7 +40,7 @@ function CartComponent() {
   };
 
   useEffect(() => {
-    if (address) {
+    if (user.defaultAddress) {
       if (user.phoneConfirmed) {
         getCart();
       } else {
@@ -78,9 +78,10 @@ function CartComponent() {
     if (result) {
       if (result.payUrl) {
         window.location.href = result.payUrl;
+      } else {
+        swal('Success!', '', 'success');
+        navigate('/history-order');
       }
-
-      swal('Success!', '', 'success');
     } else {
       swal('Failed!', '', 'error');
     }
