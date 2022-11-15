@@ -1,15 +1,14 @@
 import * as request from '~/utils/request';
 import { endpoints } from '~/utils/request';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 export const getCart = async () => {
   try {
     const res = await request.get(endpoints['cart'], {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
-
     return res.data;
   } catch (e) {}
 };
@@ -18,7 +17,7 @@ export const countCart = async () => {
   try {
     const res = await request.get(endpoints['cart'] + '/count', {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
     return res.data;
@@ -35,7 +34,7 @@ export const addToCart = async (id, quantity) => {
 
       {
         headers: {
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
           accept: '*/*',
           'Content-Type': 'application/json',
         },
@@ -49,7 +48,7 @@ export const removeCart = async (id) => {
   try {
     const res = await request.rqdelete(endpoints['cart'] + '/' + id, {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
         accept: '*/*',
       },
     });
@@ -66,7 +65,7 @@ export const updateCart = async (id, quantity) => {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
           accept: '*/*',
         },
       },

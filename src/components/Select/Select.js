@@ -7,6 +7,8 @@ function Select({ options = [], select, onChange, className }) {
     [className]: className,
   });
 
+  console.log(options);
+
   return (
     <div className={classes}>
       <select className={cx('slt')} value={select} onChange={onChange}>

@@ -1,14 +1,22 @@
 import * as cartAPI from '~/api/cartApi';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  updateCart as update,
+  updateCount,
+} from '~/ActionCreators/CartCreator';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './CartItem.module.scss';
 import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
-function CartItem({ product = {} }) {
+function CartItem({ product = {}, indexList }) {
   const commas = (str) => {
     return str.replace(/.(?=(?:.{3})+$)/g, '$&.');
   };
+  const cart = useSelector((state) => state.cart.cart);
+  const count = useSelector((state) => state.cart.count);
+  const dispatch = useDispatch();
 
   const updateCart = async (id, quantity) => {
     const result = await cartAPI.updateCart(id, quantity);
@@ -19,8 +27,15 @@ function CartItem({ product = {} }) {
 
   const changeQuantity = (quantity) => {
     if (updateCart(product.productVariation.id, quantity)) {
+      dispatch(updateCount(count - (product.quantity - quantity)));
+      dispatch(
+        update(
+          cart.map((item, index) =>
+            index === indexList ? { ...item, quantity: quantity } : item,
+          ),
+        ),
+      );
       setQuantity(quantity);
-      window.location.reload();
     } else {
       swal('Error!!', "Can't update cart!", 'error');
     }
@@ -49,10 +64,6 @@ function CartItem({ product = {} }) {
                 .filter((item, index) => index < 6)
                 .join(' ')}
             </span>
-            {/* <div
-              className={cx('color-circle')}
-              style={{ backgroundColor: product.color.hex }}
-            ></div> */}
           </div>
           <div className={cx('quantity')}>
             <div className={cx('quantity-btn')}>
@@ -86,10 +97,7 @@ function CartItem({ product = {} }) {
             }
           >
             {commas(
-              (
-                (product.productVariation.price * 100) /
-                (100 - product.productVariation.discount)
-              ).toFixed(0) + '',
+              (product.productVariation.price * quantity).toFixed(0) + '',
             )}{' '}
             VND
           </span>
@@ -98,7 +106,7 @@ function CartItem({ product = {} }) {
               {commas(
                 (
                   product.productVariation.price *
-                  (1 - product.productVariation.discount / 100) *
+                  ((100 - product.productVariation.discount) / 100) *
                   quantity
                 ).toFixed(0) + '',
               )}{' '}

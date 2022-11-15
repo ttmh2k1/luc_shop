@@ -5,7 +5,7 @@ import Button from '~/components/Button';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { resetPassword } from '~/ActionCreators/UserCreator';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 function ForgotComponent() {
   const [phone, setPhone] = useState('');
@@ -14,8 +14,8 @@ function ForgotComponent() {
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    cookies.save('email', email);
-    cookies.save('phone', phone);
+    localStorage.setItem('email', email);
+    localStorage.setItem('phone', phone);
     dispatch(resetPassword(email, phone));
     navigate('/verify');
   };

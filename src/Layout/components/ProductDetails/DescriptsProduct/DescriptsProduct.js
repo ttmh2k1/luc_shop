@@ -1,6 +1,9 @@
 import Button from '~/components/Button';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateCount } from '~/ActionCreators/CartCreator';
+import mainReducer from '~/redux/RootReducer';
 import * as cartAPI from '~/api/cartApi';
 import swal from 'sweetalert';
 import classNames from 'classnames/bind';
@@ -9,18 +12,24 @@ import styles from './DescriptsProduct.module.scss';
 const cx = classNames.bind(styles);
 
 function DescriptsProduct({ product = {} }) {
+  const dispatch = useDispatch();
+
   const commas = (str) => {
     return str.replace(/.(?=(?:.{3})+$)/g, '$&.');
   };
 
-  console.log(product);
+  const countCart = async () => {
+    const result = await cartAPI.countCart();
+    if (result) {
+      dispatch(updateCount(result));
+    }
+  };
 
   const addProduct = async (id, quantity) => {
     const result = await cartAPI.addToCart(id, quantity);
-
     if (result) {
       swal('Product was added to cart!', 'You can see that!', 'success');
-      navigate(0);
+      countCart();
     } else {
       swal("Can't add product to cart!", 'You can see that!', 'error');
     }
@@ -31,9 +40,9 @@ function DescriptsProduct({ product = {} }) {
 
     if (result) {
       swal('Product was added to cart!', 'You can see that!', 'success');
+      countCart();
       // window.location.reload();
-      // navigate(0);
-      navigate('/cart');
+      // //navigate(0);
     } else {
       swal("Can't add product to cart!", 'You can see that!', 'error');
     }
@@ -174,11 +183,13 @@ function DescriptsProduct({ product = {} }) {
               className={cx('btn')}
               onClick={(e) => addToCart(e)}
             />
+
             <Button
               primary
               children={'Buy Now'}
               className={cx('btn')}
               onClick={(e) => buyNow(e)}
+              to="/cart"
             />
           </div>
         </div>

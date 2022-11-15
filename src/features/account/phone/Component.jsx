@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import { login } from '~/ActionCreators/UserCreator';
 import * as userAPI from '~/api/userApi';
 import classNames from 'classnames/bind';
@@ -22,17 +22,24 @@ function PhoneComponent() {
 
   const [otp, setOtp] = useState('');
 
+  useEffect(() => {
+    if (!user.phone) {
+      swal("Don't have phone number", 'please submit that!', 'warning');
+      navigate('/phone');
+    }
+  }, []);
+
   const confirmPhone = async () => {
     const result = await userAPI.confirmPhone(otp);
 
     if (result) {
       swal('Successful!!', '', 'success');
-      cookies.remove('user');
-      console.log(result);
-      cookies.save('user', result);
+      localStorage.removeItem('user');
+
+      localStorage.setItem('user', result);
 
       dispatch(login(result));
-      navigate(0);
+      //navigate(0);
     } else {
       swal('Failed!!', '', 'error');
     }
@@ -68,34 +75,42 @@ function PhoneComponent() {
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className={cx('form-item')}>
               <span className={cx('label')}>Phone number</span>
-              <Input
-                type="text"
-                className={cx('input')}
-                placeholder="Phone number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div className={cx('verify')}>
-              <div className={cx('OTP')}>
-                <Input
-                  type="text"
-                  placeholder="OTP code"
-                  className={cx('input')}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                />
-                <Button
-                  primary
-                  children={'SEND OTP'}
-                  className={cx('btn')}
-                  onClick={(e) => sendOTP(e)}
-                />
+              <div className={cx('value')}>
+                <span>{phone}</span>
               </div>
             </div>
-            <div className={cx('save')}>
-              <Button primary children={'CONFIRM'} className={cx('btn-save')} />
-            </div>
+            {user.phoneConfirmed ? (
+              <div className={cx('notify')}>
+                <span>Phone was confirmed</span>
+              </div>
+            ) : (
+              <div>
+                <div className={cx('verify')}>
+                  <div className={cx('OTP')}>
+                    <Input
+                      type="text"
+                      placeholder="OTP code"
+                      className={cx('input')}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                    />
+                    <Button
+                      primary
+                      children={'SEND OTP'}
+                      className={cx('btn')}
+                      onClick={(e) => sendOTP(e)}
+                    />
+                  </div>
+                </div>
+                <div className={cx('save')}>
+                  <Button
+                    primary
+                    children={'CONFIRM'}
+                    className={cx('btn-save')}
+                  />
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </div>

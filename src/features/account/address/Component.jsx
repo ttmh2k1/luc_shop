@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '~/components/Button';
 import ListAddress from '~/Layout/components/ListAddress';
 import AddressForm from '~/Layout/components/ListAddress/AddressForm';
 import * as addressAPI from '~/api/addressApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 import classNames from 'classnames/bind';
 import styles from './Address.module.scss';
@@ -15,17 +16,16 @@ const cx = classNames.bind(styles);
 function AddressComponent() {
   const [newAddress, setNewAddress] = useState(false);
   const [listAddress, setListAddress] = useState([]);
-
+  let { add } = useParams();
   const getListAddress = async () => {
     const result = await addressAPI.getAddress();
     setListAddress(result);
   };
 
-  console.log('user: ', cookies.load('user'));
-
   useEffect(() => {
     getListAddress();
-  }, []);
+    add = 0;
+  }, [add]);
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>

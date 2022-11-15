@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Menu.module.scss';
 
@@ -34,9 +35,9 @@ function Menu({ categories, id = 0, href = '/', filter }) {
                   }
                   onClick={() => setActive(index)}
                 >
-                  <a href={href + '/' + category.id + '/0/0'}>
+                  <Link to={href + '/' + category.id + '/0/0'}>
                     <li>{category.name}</li>
-                  </a>
+                  </Link>
                 </div>
               );
             })}
@@ -58,19 +59,13 @@ function Menu({ categories, id = 0, href = '/', filter }) {
                       : cx('filter')
                   }
                 >
-                  <a
-                    href={
-                      href +
-                      '/' +
-                      active +
-                      '/' +
-                      filter.point +
-                      '/' +
-                      filter.desc
+                  <Link
+                    to={
+                      href + '/' + id + '/' + filter.point + '/' + filter.desc
                     }
                   >
                     <li>{filter.name}</li>
-                  </a>
+                  </Link>
                 </div>
               );
             })}

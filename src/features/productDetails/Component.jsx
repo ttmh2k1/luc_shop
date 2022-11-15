@@ -15,6 +15,8 @@ function ProductDetailsComponent() {
   const [reviews, setReviews] = useState([]);
   const [product, setProduct] = useState();
 
+  console.log(id);
+
   const getBestSeller = async () => {
     const result = await productAPI.getBestSeller();
 
@@ -43,7 +45,7 @@ function ProductDetailsComponent() {
     getProductById();
     getBestSeller();
     getProductReview();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (product) {

@@ -52,7 +52,7 @@ function WomenComponent() {
 
   useEffect(() => {
     getCategory();
-  }, []);
+  }, [id, sort, desc]);
 
   return (
     <div className={cx('wrapper')}>

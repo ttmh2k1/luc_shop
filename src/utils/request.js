@@ -25,7 +25,7 @@ export let endpoints = {
 
 const request = axios.create({
   // baseURL: 'http://localhost:8080/api/',
-  baseURL: 'http://mighty-birds-know-118-71-222-255.loca.lt/api/',
+  baseURL: 'http://fifty-donkeys-hide-203-113-147-184.loca.lt/api/',
 });
 
 export const get = async (path, options = []) => {
@@ -39,7 +39,6 @@ export const post = async (path, data, headers) => {
 };
 
 export const put = async (path, data, headers) => {
-  console.log(data);
   const response = await request.put(path, data, headers);
   return response.data;
 };

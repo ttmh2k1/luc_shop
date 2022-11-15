@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Subnav.module.scss';
 import classNames from 'classnames/bind';
 import styles from './Subnav.module.scss';
@@ -12,21 +13,21 @@ function SubNavbar({ state }) {
         {state.list.map((category, index) => {
           return (
             <ul className={cx('categories')} key={index}>
-              <a
+              <Link
                 className={cx('category-name')}
-                href={state.href + '/' + category.id + '/0/0'}
+                to={state.href + '/' + category.id + '/0/0'}
               >
                 {category.name}
-              </a>
+              </Link>
               {category.listCategory.map((item, index) => {
                 return (
                   <li className={cx('category')} key={index}>
-                    <a
+                    <Link
                       className={cx('category-name')}
-                      href={state.href + '/' + item.id + '/0/0'}
+                      to={state.href + '/' + item.id + '/0/0'}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   </li>
                 );
               })}

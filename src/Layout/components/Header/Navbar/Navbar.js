@@ -1,4 +1,5 @@
 import { useState, memo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Subnav from './Subnav';
 import * as categoryAPI from '~/api/categoryApi';
 import classNames from 'classnames/bind';
@@ -122,7 +123,7 @@ function Navbar() {
                 onMouseOver={() => handleHover(index)}
               >
                 <li key={index} className={cx('item')}>
-                  <a href={item.href}>{item.name}</a>
+                  <Link to={item.href}>{item.name}</Link>
 
                   {listCategories && index === 1 && (
                     <Subnav
