@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCart } from '~/ActionCreators/CartCreator';
+import { updateCart, updateCount } from '~/ActionCreators/CartCreator';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as orderAPI from '~/api/orderApi';
 import * as addressAPI from '~/api/addressApi';
@@ -17,109 +17,43 @@ import COD from '~/commons/assets/cod.png';
 import * as cartAPI from '~/api/cartApi';
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
+import { set } from 'react-hook-form';
 
 const cx = classNames.bind(styles);
 
 function CartComponent() {
   const user = useSelector((state) => state.user.user);
   const cart = useSelector((state) => state.cart.cart);
-  const [options, setOptions] = useState({
-    City: [{ value: 0, label: 'City' }],
-    District: [{ value: 0, label: 'District' }],
-    Ward: [{ value: 0, label: 'Ward' }],
-  });
-
-  const [name, setName] = useState(
-    user.defaultAddress.receiveName ? user.defaultAddress.receiveName : '',
-  );
-  const [phone, setPhone] = useState(
-    user.defaultAddress.receivePhone ? user.defaultAddress.receivePhone : '',
-  );
-  const [email, setEmail] = useState(user.email);
-  const [city, setCity] = useState(
-    user.defaultAddress.addressWard.district.provinceCity.id
-      ? user.defaultAddress.addressWard.district.provinceCity.id
-      : 0,
-  );
-  const [district, setDistrict] = useState(
-    user.defaultAddress.addressWard.district.id
-      ? user.defaultAddress.addressWard.district.id
-      : 0,
-  );
-  const [ward, setWard] = useState(
-    user.defaultAddress.addressWard.id ? user.defaultAddress.addressWard.id : 0,
-  );
-  const [addressDetail, setAdressDetail] = useState(
-    user.defaultAddress.addressDetail ? user.defaultAddress.addressDetail : '',
-  );
+  const [newAddress, setNewAddress] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [payment, setPayment] = useState('OFFLINE_CASH_ON_DELIVERY');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [listAdress, setListAddress] = useState([]);
+  const [list, setList] = useState([]);
+  const [address, setAddress] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const success = searchParams.get('success');
 
-  const getAllCity = async () => {
-    const result = await addressAPI.getAllCity();
-
-    setOptions({
-      ...options,
-      City: [
-        ...options.City,
-        ...result.map((city) => {
-          return { value: city.id, label: city.name };
-        }),
-      ],
-      District: [{ value: 0, label: 'District' }],
-      Ward: [{ value: 0, label: 'Ward' }],
-    });
-  };
-
-  const getDistrictOfCity = async (id) => {
-    const result = await addressAPI.getDistrictOfCity(id);
-
-    if (result) {
-      setOptions({
-        ...options,
-        District: [
-          { value: 0, label: 'District' },
-          ...result.districts.map((district) => {
-            return { value: district.id, label: district.name };
-          }),
-        ],
-        Ward: [{ value: 0, label: 'Ward' }],
-      });
-    }
-  };
-
-  const getWardOfDistrict = async (id) => {
-    const result = await addressAPI.getWardOfDistrict(id);
-    if (result) {
-      setOptions({
-        ...options,
-        Ward: [
-          { value: 0, label: 'Ward' },
-          ...result.wards.map((ward) => {
-            return { value: ward.id, label: ward.name };
-          }),
-        ],
-      });
-    }
-  };
-
   useEffect(() => {
-    getAllCity();
+    getListAddress();
+    setEmail(user.email);
   }, []);
 
-  useEffect(() => {
-    getDistrictOfCity(city);
-  }, [city]);
-
-  useEffect(() => {
-    getWardOfDistrict(district);
-  }, [district]);
+  const getListAddress = async () => {
+    const result = await addressAPI.getAddress();
+    console.log(result);
+    if (result) {
+      setName(result[0].receiverName);
+      setPhone(result[0].receiverPhone);
+      setListAddress(result);
+    }
+  };
 
   const getCart = async () => {
     const result = await cartAPI.getCart();
@@ -128,24 +62,26 @@ function CartComponent() {
     }
   };
 
-  useEffect(() => {
-    if (user.defaultAddress) {
-      if (user.phoneConfirmed) {
-        getCart();
-      } else {
-        swal("Haven't ever confirm phone", 'Please confirm phone', 'warning');
-        // navigate('/phone');
-      }
-    } else {
-      swal("Don't have address", 'Please add address', 'warning');
-      // navigate('/address');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user.defaultAddress) {
+  //     if (user.phoneConfirmed) {
+  //       getCart();
+  //     } else {
+  //       swal("Haven't ever confirm phone", 'Please confirm phone', 'warning');
+  //       // navigate('/phone');
+  //     }
+  //   } else {
+  //     swal("Don't have address", 'Please add address', 'warning');
+  //     // navigate('/address');
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (success) {
       if (success === 'true') {
         swal('Success!', '', 'success');
+        dispatch(updateCount(0));
+        dispatch(updateCart([]));
         navigate('/history-order');
       } else {
         swal('Failed!', '', 'Failed');
@@ -153,43 +89,43 @@ function CartComponent() {
     }
   }, []);
 
-  const updateAddress = async () => {
-    const result = await addressAPI.updateAddress(user.defaultAddress.id, {
-      idAddressWard: ward,
-      addressDetail: addressDetail,
-      receiverName: name,
-      receiverPhone: phone,
-      isDefault: true,
-    });
-  };
+  // const updateAddress = async () => {
+  //   const result = await addressAPI.updateAddress(user.defaultAddress.id, {
+  //     idAddressWard: ward,
+  //     addressDetail: addressDetail,
+  //     receiverName: name,
+  //     receiverPhone: phone,
+  //     isDefault: true,
+  //   });
+  // };
 
-  const addAddress = async () => {
-    const result = await addressAPI.addAddress({
-      idAddressWard: ward,
-      addressDetail: addressDetail,
-      receiverName: name,
-      receiverPhone: phone,
-      isDefault: true,
-    });
-  };
+  // const addAddress = async () => {
+  //   const result = await addressAPI.addAddress({
+  //     idAddressWard: ward,
+  //     addressDetail: addressDetail,
+  //     receiverName: name,
+  //     receiverPhone: phone,
+  //     isDefault: true,
+  //   });
+  // };
 
   const addOrderByCart = async () => {
     const idProductVariations = cart.map((item) => item.productVariation.id);
-    if (user.defaultAddress) {
-      if (
-        user.defaultAddress.addressWard.id !== ward ||
-        user.defaultAddress.addressDetail !== addressDetail ||
-        user.defaultAddress.receiveName !== name ||
-        user.defaultAddress.receivePhone !== phone
-      ) {
-        updateAddress();
-      }
-    } else {
-      addAddress();
-    }
+    // if (user.defaultAddress) {
+    //   if (
+    //     user.defaultAddress.addressWard.id !== ward ||
+    //     user.defaultAddress.addressDetail !== addressDetail ||
+    //     user.defaultAddress.receiverName !== name ||
+    //     user.defaultAddress.receiverPhone !== phone
+    //   ) {
+    //     updateAddress();
+    //   }
+    // } else {
+    //   addAddress();
+    // }
     const result = await orderAPI.addOrderByCart({
       note: note,
-      idAddress: user.defaultAddress.id,
+      idAddress: address,
       paymentMethod: payment,
       idProductVariations: idProductVariations,
     });
@@ -230,13 +166,13 @@ function CartComponent() {
       image: Momo,
       key: 'ONLINE_PAYMENT_MOMO',
     },
-    {
-      id: 'payment',
+    // {
+    //   id: 'payment',
 
-      name: 'Paypal',
-      image: Paypal,
-      key: 'ONLINE_PAYMENT_PAYPAL',
-    },
+    //   name: 'Paypal',
+    //   image: Paypal,
+    //   key: 'ONLINE_PAYMENT_PAYPAL',
+    // },
   ];
 
   return (
@@ -271,33 +207,45 @@ function CartComponent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              placeholder="Address Details"
-              type="text"
-              className={cx('input', 'payment-input')}
-              value={addressDetail}
-              onChange={(e) => setAdressDetail(e.target.value)}
-            />
 
-            <div className={cx('select-row')}>
+            <div className={cx('address-option')}>
               <Select
-                options={options.City}
+                options={
+                  listAdress
+                    ? listAdress.map((item) => {
+                        const id = 'addres';
+                        const value = item.id;
+                        const label =
+                          item.addressDetail +
+                          ', ' +
+                          item.addressWard.name +
+                          ', ' +
+                          item.addressWard.district.name +
+                          ', ' +
+                          item.addressWard.district.provinceCity.name;
+                        return {
+                          id: id,
+                          value: value,
+                          label: label,
+                          name: item.receiverName,
+                          phone: item.receiverPhone,
+                        };
+                      })
+                    : []
+                }
                 className={cx('select')}
-                select={city}
-                onChange={(e) => setCity(e.target.value)}
+                select={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
-              <Select
-                options={options.District}
-                className={cx('select')}
-                select={district}
-                onChange={(e) => setDistrict(e.target.value)}
-              />
-              <Select
-                options={options.Ward}
-                className={cx('select')}
-                select={ward}
-                onChange={(e) => setWard(e.target.value)}
-              />
+              {/* <div className={cx('add-address')}>
+                <Button
+                  children="New Address"
+                  text
+                  onClick={() => {
+                    setNewAddress(!newAddress);
+                  }}
+                />
+              </div> */}
             </div>
 
             <Input

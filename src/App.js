@@ -6,14 +6,26 @@ import {
   Navigate,
 } from 'react-router-dom';
 // import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { login } from '~/ActionCreators/UserCreator';
 import { publicRoutes, privateRoutes } from './routes';
 //import cookies from 'react-cookies';
 
 function App() {
   // const token = localStorage.getItem('token');
   const token = useSelector((state) => state.user.token);
+  const dispatch = useDispatch();
 
+  // const getUser = () => {
+  //   const user = localStorage.getItem('user');
+  //   const token = localStorage.getItem('token');
+  //   dispatch(login({ user: user, token: token }));
+  // };
+
+  useEffect(() => {
+    // getUser();
+  });
   return (
     <Router>
       <Routes>

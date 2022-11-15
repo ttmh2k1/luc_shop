@@ -128,12 +128,12 @@ function ListCartItem() {
           </div>
           <div className={cx('des-item')}>
             <span className={cx('label')}>Delivery Fee</span>
-            <span className={cx('value')}>0.0 VND</span>
+            <span className={cx('value')}>30.000 VND</span>
           </div>
         </div>
         <div className={cx('total')}>
           <span className={cx('label')}>Total</span>
-          <span className={cx('value')}>{commas(total + '')} VND</span>
+          <span className={cx('value')}>{commas(total + 30000 + '')} VND</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCount } from '~/ActionCreators/CartCreator';
+import { update } from '~/ActionCreators/UserCreator';
 import logo from '~/commons/assets/logo.png';
 import { Link } from 'react-router-dom';
 import AccountMenu from './AccountMenu';
@@ -15,6 +16,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import '~/styles/grid/grid.css';
 import * as cartAPI from '~/api/cartApi';
+import * as userAPI from '~/api/userApi';
 import classNames from 'classnames/bind';
 import styles from './HeaderTop.module.scss';
 
@@ -34,8 +36,18 @@ function HeaderTop() {
     }
   };
 
+  const getUser = async () => {
+    if (localStorage.getItem('token')) {
+      const user = await userAPI.currentUser();
+      if (user) {
+        dispatch(update(user));
+      }
+    }
+  };
+
   useEffect(() => {
     countCart();
+    getUser();
   }, []);
 
   return (
