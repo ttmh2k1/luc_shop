@@ -9,7 +9,7 @@ import styles from './Verify.module.scss';
 
 import { verify } from '~/ActionCreators/UserCreator';
 import { useNavigate } from 'react-router-dom';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import * as userAPI from '~/api/userApi';
 import swal from 'sweetalert';
 
@@ -84,15 +84,15 @@ function VerifyComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    cookies.save('otp', otp);
+    localStorage.setItem('otp', otp);
     dispatch(verify(otp));
     navigate('/reset-password');
   };
 
   const goBack = (e) => {
     e.preventDefault();
-    cookies.remove('email');
-    cookies.remove('phone');
+    localStorage.removeItem('email');
+    localStorage.removeItem('phone');
     navigate('/login');
   };
   return (

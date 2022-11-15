@@ -39,7 +39,6 @@ export const post = async (path, data, headers) => {
 };
 
 export const put = async (path, data, headers) => {
-  console.log(data);
   const response = await request.put(path, data, headers);
   return response.data;
 };

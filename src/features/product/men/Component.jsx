@@ -20,6 +20,8 @@ function MenComponent() {
   sort = parseInt(sort);
   desc = desc === 'true';
 
+  useEffect(() => {}, []);
+
   const getCategory = async () => {
     const result = await categoryAPI.getCategoryById(32);
     setCategories(() => {
@@ -53,7 +55,7 @@ function MenComponent() {
 
   useEffect(() => {
     getCategory();
-  }, []);
+  }, [id, sort, desc]);
 
   return (
     <div className={cx('wrapper')}>

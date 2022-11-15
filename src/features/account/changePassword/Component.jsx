@@ -12,7 +12,7 @@ import * as userAPI from '~/api/userApi';
 import classNames from 'classnames/bind';
 import styles from './ChangePassword.module.scss';
 import swal from 'sweetalert';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 const cx = classNames.bind(styles);
 
@@ -70,7 +70,6 @@ function ChangePasswordComponent() {
     }
   };
   const changePassword = async () => {
-    console.log(newPassword + ' ' + oldPassword + ' ' + otp);
     const result = await userAPI.changePassword(newPassword, oldPassword, otp);
 
     return result;
@@ -81,8 +80,8 @@ function ChangePasswordComponent() {
       if (confirm === newPassword && newPassword.length > 7) {
         if (changePassword()) {
           swal('Change password successful!', 'Please login again', 'success');
-          cookies.remove('token');
-          cookies.remove('user');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
           dispatch(logout());
 
           navigate('/login');

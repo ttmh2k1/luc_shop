@@ -9,7 +9,7 @@ import Button from '~/components/Button';
 import Input from '~/components/Input';
 import classNames from 'classnames/bind';
 import styles from './AddressForm.module.scss';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
@@ -28,9 +28,9 @@ const AddressForm = ({ title = '', size = 0 }) => {
   const [district, setDistrict] = useState(0);
   const [ward, setWard] = useState(0);
   const [addressDetail, setAdressDetail] = useState('');
+  const [fullname, setFullname] = useState('');
+  const [phone, setPhone] = useState('');
   const isDefault = size > 0 ? false : true;
-
-  console.log('city ' + city + ' District ' + district + ' ward ' + ward);
 
   const getAllCity = async () => {
     const result = await addressAPI.getAllCity();
@@ -48,7 +48,6 @@ const AddressForm = ({ title = '', size = 0 }) => {
 
   const getDistrictOfCity = async (id) => {
     const result = await addressAPI.getDistrictOfCity(id);
-    console.log(result);
     if (result) {
       setOptions({
         ...options,
@@ -81,10 +80,8 @@ const AddressForm = ({ title = '', size = 0 }) => {
   const getCurrentUser = async () => {
     const result = await userAPI.currentUser();
     if (result) {
-      cookies.remove('user');
-      console.log('currentUser :', result);
-      cookies.save('user', result);
-      dispatch(login(result));
+      localStorage.removeItem('user');
+      localStorage.setItem('user', result);
     }
   };
 
@@ -92,15 +89,15 @@ const AddressForm = ({ title = '', size = 0 }) => {
     const result = await addressAPI.addAddress({
       idAddressWard: ward,
       addressDetail: addressDetail,
-      receiverName: user.fullname,
-      receiverPhone: user.phone,
+      receiverName: fullname,
+      receiverPhone: phone,
       isDefault: isDefault,
     });
 
     if (result) {
       swal('Created new Address!', '', 'success');
       getCurrentUser();
-      // navigate(0);
+      navigate('/address/1');
     } else swal('Failed!', '', 'error');
   };
 
@@ -154,6 +151,22 @@ const AddressForm = ({ title = '', size = 0 }) => {
               placeholder={'Address details'}
               value={addressDetail}
               onChange={(e) => setAdressDetail(e.target.value)}
+            />
+          </div>
+          <div className={cx('name')}>
+            <Input
+              type="text"
+              placeholder={'Full name'}
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
+            />
+          </div>
+          <div className={cx('phone')}>
+            <Input
+              type="text"
+              placeholder={'Phone number'}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
 

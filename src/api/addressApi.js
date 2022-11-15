@@ -1,12 +1,12 @@
 import * as request from '~/utils/request';
 import { endpoints } from '~/utils/request';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 export const getAddress = async () => {
   try {
     const res = await request.get(endpoints['address'], {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 
@@ -18,7 +18,7 @@ export const getAddressById = async (id) => {
   try {
     const res = await request.get(endpoints['address'] + '/' + id, {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 
@@ -30,7 +30,7 @@ export const addAddress = async (obj = {}) => {
   try {
     const res = await request.post(endpoints['address'], obj, {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 
@@ -42,7 +42,7 @@ export const updateAddress = async (id, obj = {}) => {
   try {
     const res = await request.put(endpoints['address'] + '/' + id, obj, {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 

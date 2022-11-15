@@ -4,7 +4,7 @@ import Input from '~/components/Input';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import { login } from '~/ActionCreators/UserCreator';
 import * as userAPI from '~/api/userApi';
 import classNames from 'classnames/bind';
@@ -23,7 +23,7 @@ function PhoneComponent() {
   const [otp, setOtp] = useState('');
 
   useEffect(() => {
-    if (user.phone) {
+    if (!user.phone) {
       swal("Don't have phone number", 'please submit that!', 'warning');
       navigate('/phone');
     }
@@ -34,12 +34,12 @@ function PhoneComponent() {
 
     if (result) {
       swal('Successful!!', '', 'success');
-      cookies.remove('user');
-      console.log(result);
-      cookies.save('user', result);
+      localStorage.removeItem('user');
+
+      localStorage.setItem('user', result);
 
       dispatch(login(result));
-      navigate(0);
+      //navigate(0);
     } else {
       swal('Failed!!', '', 'error');
     }
@@ -75,16 +75,14 @@ function PhoneComponent() {
           <form onSubmit={(e) => handleSubmit(e)}>
             <div className={cx('form-item')}>
               <span className={cx('label')}>Phone number</span>
-              <Input
-                type="text"
-                className={cx('input')}
-                placeholder="Phone number"
-                value={phone}
-                onChange={(e) => setPhone(phone)}
-              />
+              <div className={cx('value')}>
+                <span>{phone}</span>
+              </div>
             </div>
             {user.phoneConfirmed ? (
-              <span>Phone was confirmed</span>
+              <div className={cx('notify')}>
+                <span>Phone was confirmed</span>
+              </div>
             ) : (
               <div>
                 <div className={cx('verify')}>

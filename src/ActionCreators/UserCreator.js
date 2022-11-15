@@ -4,6 +4,12 @@ export function login(payload) {
     payload: payload,
   };
 }
+export function update(payload) {
+  return {
+    type: 'UPDATE_USER',
+    payload: payload,
+  };
+}
 export function logout(payload = null) {
   return {
     type: 'USER_LOGOUT',

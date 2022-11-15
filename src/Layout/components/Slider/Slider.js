@@ -6,6 +6,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateCount } from '~/ActionCreators/CartCreator';
 import * as productAPI from '~/api/productApi';
 import * as cartAPI from '~/api/cartApi';
 import classNames from 'classnames/bind';
@@ -20,9 +22,16 @@ function SliderBar() {
   const [state, setState] = useState(0);
   const [sourcePhoto, setSourcePhoto] = useState(1);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const getNewArrival = async () => {
     const result = await productAPI.getNewArrival();
     setSourcePhoto(result.slice(3, 7));
+  };
+  const countCart = async () => {
+    const result = await cartAPI.countCart();
+    if (result) {
+      dispatch(updateCount(result));
+    }
   };
 
   const addProduct = async (id, quantity) => {
@@ -30,7 +39,7 @@ function SliderBar() {
 
     if (result) {
       swal('Product was added to cart!', 'You can see that!', 'success');
-      navigate('/cart');
+      countCart();
     } else {
       swal("Can't add product to cart!", 'You can see that!', 'error');
     }
@@ -145,14 +154,14 @@ function SliderBar() {
                       rounded
                       children="Explore"
                       className={cx('btn', 'btn-explore')}
-                      href={'/product-details/' + photo.id}
+                      to={'/product-details/' + photo.id}
                     ></Button>
                     <Button
                       primary
                       rounded
-                      value
                       children="Buy Now"
                       className={cx('btn', 'btn-buy-now')}
+                      to="/cart"
                       onClick={() => addToCart(photo.id)}
                     ></Button>
                   </div>

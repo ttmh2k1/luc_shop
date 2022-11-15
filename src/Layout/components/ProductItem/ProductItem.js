@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './ProductItem.module.scss';
 
@@ -11,7 +11,7 @@ function ProductItem({ product }) {
 
   return (
     <div className={cx('wrapper')}>
-      <a className={cx('container')} href={'/product-details/' + product.id}>
+      <Link className={cx('container')} to={'/product-details/' + product.id}>
         {product.maxDiscount > 0 ? (
           <span className={cx('sale')}>On Sale {product.maxDiscount}%</span>
         ) : (
@@ -43,7 +43,7 @@ function ProductItem({ product }) {
             </span>
           )}
         </div>
-      </a>
+      </Link>
     </div>
   );
 }

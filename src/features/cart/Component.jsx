@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateCart } from '~/ActionCreators/CartCreator';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as orderAPI from '~/api/orderApi';
+import * as addressAPI from '~/api/addressApi';
 import swal from 'sweetalert';
 import Radio from '~/components/Radio';
 import Input from '~/components/Input';
+import Select from '~/components/Select';
 import Button from '~/components/Button';
 import FormPayment from '~/Layout/components/FormPayment';
 import ListCartItem from '~/Layout/components/ListCartItem';
@@ -19,24 +22,110 @@ const cx = classNames.bind(styles);
 
 function CartComponent() {
   const user = useSelector((state) => state.user.user);
-  const [cartDetails, setCartDetails] = useState([]);
-  const [name, setName] = useState(user.fullname);
-  const [phone, setPhone] = useState(user.phone ? user.phone : '');
+  const cart = useSelector((state) => state.cart.cart);
+  const [options, setOptions] = useState({
+    City: [{ value: 0, label: 'City' }],
+    District: [{ value: 0, label: 'District' }],
+    Ward: [{ value: 0, label: 'Ward' }],
+  });
+
+  const [name, setName] = useState(
+    user.defaultAddress.receiveName ? user.defaultAddress.receiveName : '',
+  );
+  const [phone, setPhone] = useState(
+    user.defaultAddress.receivePhone ? user.defaultAddress.receivePhone : '',
+  );
   const [email, setEmail] = useState(user.email);
-  const [address, setAddress] = useState(user.defaultAddress);
+  const [city, setCity] = useState(
+    user.defaultAddress.addressWard.district.provinceCity.id
+      ? user.defaultAddress.addressWard.district.provinceCity.id
+      : 0,
+  );
+  const [district, setDistrict] = useState(
+    user.defaultAddress.addressWard.district.id
+      ? user.defaultAddress.addressWard.district.id
+      : 0,
+  );
+  const [ward, setWard] = useState(
+    user.defaultAddress.addressWard.id ? user.defaultAddress.addressWard.id : 0,
+  );
+  const [addressDetail, setAdressDetail] = useState(
+    user.defaultAddress.addressDetail ? user.defaultAddress.addressDetail : '',
+  );
   const [note, setNote] = useState('');
   const [payment, setPayment] = useState('OFFLINE_CASH_ON_DELIVERY');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const success = searchParams.get('success');
 
-  console.log(user);
+  const getAllCity = async () => {
+    const result = await addressAPI.getAllCity();
+
+    setOptions({
+      ...options,
+      City: [
+        ...options.City,
+        ...result.map((city) => {
+          return { value: city.id, label: city.name };
+        }),
+      ],
+      District: [{ value: 0, label: 'District' }],
+      Ward: [{ value: 0, label: 'Ward' }],
+    });
+  };
+
+  const getDistrictOfCity = async (id) => {
+    const result = await addressAPI.getDistrictOfCity(id);
+
+    if (result) {
+      setOptions({
+        ...options,
+        District: [
+          { value: 0, label: 'District' },
+          ...result.districts.map((district) => {
+            return { value: district.id, label: district.name };
+          }),
+        ],
+        Ward: [{ value: 0, label: 'Ward' }],
+      });
+    }
+  };
+
+  const getWardOfDistrict = async (id) => {
+    const result = await addressAPI.getWardOfDistrict(id);
+    if (result) {
+      setOptions({
+        ...options,
+        Ward: [
+          { value: 0, label: 'Ward' },
+          ...result.wards.map((ward) => {
+            return { value: ward.id, label: ward.name };
+          }),
+        ],
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllCity();
+  }, []);
+
+  useEffect(() => {
+    getDistrictOfCity(city);
+  }, [city]);
+
+  useEffect(() => {
+    getWardOfDistrict(district);
+  }, [district]);
 
   const getCart = async () => {
     const result = await cartAPI.getCart();
-    setCartDetails(result);
+    if (result) {
+      dispatch(updateCart(result));
+    }
   };
 
   useEffect(() => {
@@ -45,11 +134,11 @@ function CartComponent() {
         getCart();
       } else {
         swal("Haven't ever confirm phone", 'Please confirm phone', 'warning');
-        navigate('/phone');
+        // navigate('/phone');
       }
     } else {
       swal("Don't have address", 'Please add address', 'warning');
-      navigate('/address');
+      // navigate('/address');
     }
   }, []);
 
@@ -64,13 +153,43 @@ function CartComponent() {
     }
   }, []);
 
+  const updateAddress = async () => {
+    const result = await addressAPI.updateAddress(user.defaultAddress.id, {
+      idAddressWard: ward,
+      addressDetail: addressDetail,
+      receiverName: name,
+      receiverPhone: phone,
+      isDefault: true,
+    });
+  };
+
+  const addAddress = async () => {
+    const result = await addressAPI.addAddress({
+      idAddressWard: ward,
+      addressDetail: addressDetail,
+      receiverName: name,
+      receiverPhone: phone,
+      isDefault: true,
+    });
+  };
+
   const addOrderByCart = async () => {
-    const idProductVariations = cartDetails.map(
-      (item) => item.productVariation.id,
-    );
+    const idProductVariations = cart.map((item) => item.productVariation.id);
+    if (user.defaultAddress) {
+      if (
+        user.defaultAddress.addressWard.id !== ward ||
+        user.defaultAddress.addressDetail !== addressDetail ||
+        user.defaultAddress.receiveName !== name ||
+        user.defaultAddress.receivePhone !== phone
+      ) {
+        updateAddress();
+      }
+    } else {
+      addAddress();
+    }
     const result = await orderAPI.addOrderByCart({
       note: note,
-      idAddress: address.id,
+      idAddress: user.defaultAddress.id,
       paymentMethod: payment,
       idProductVariations: idProductVariations,
     });
@@ -89,7 +208,7 @@ function CartComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (cartDetails.length > 0) {
+    if (cart.length > 0) {
       addOrderByCart();
     } else {
       swal('Have no item!', 'Please choose item!', 'warning');
@@ -119,6 +238,7 @@ function CartComponent() {
       key: 'ONLINE_PAYMENT_PAYPAL',
     },
   ];
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('form')}>
@@ -151,18 +271,33 @@ function CartComponent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <div className={cx('address')}>
-              {address && (
-                <span className={cx('address-detail')}>
-                  {address.addressDetail +
-                    ', ' +
-                    address.addressWard.name +
-                    ', ' +
-                    address.addressWard.district.name +
-                    ', ' +
-                    address.addressWard.district.provinceCity.name}
-                </span>
-              )}
+            <Input
+              placeholder="Address Details"
+              type="text"
+              className={cx('input', 'payment-input')}
+              value={addressDetail}
+              onChange={(e) => setAdressDetail(e.target.value)}
+            />
+
+            <div className={cx('select-row')}>
+              <Select
+                options={options.City}
+                className={cx('select')}
+                select={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              <Select
+                options={options.District}
+                className={cx('select')}
+                select={district}
+                onChange={(e) => setDistrict(e.target.value)}
+              />
+              <Select
+                options={options.Ward}
+                className={cx('select')}
+                select={ward}
+                onChange={(e) => setWard(e.target.value)}
+              />
             </div>
 
             <Input
@@ -196,7 +331,7 @@ function CartComponent() {
         </FormPayment>
       </div>
       <div className={cx('cart-details')}>
-        <ListCartItem listItems={cartDetails} />
+        <ListCartItem />
       </div>
     </div>
   );

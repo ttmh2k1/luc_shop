@@ -11,7 +11,7 @@ function OrderHistoryComponent() {
   const [listOrder, setListOrder] = useState([]);
   const getListOrder = async () => {
     const result = await orderAPI.getOrder();
-    console.log(result);
+
     setListOrder(result);
   };
   useEffect(() => {

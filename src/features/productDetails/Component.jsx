@@ -43,7 +43,7 @@ function ProductDetailsComponent() {
     getProductById();
     getBestSeller();
     getProductReview();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (product) {

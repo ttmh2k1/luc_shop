@@ -1,13 +1,13 @@
 import * as request from '~/utils/request';
 // import request from '~/utils/request';
 import { endpoints } from '~/utils/request';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 export const currentUser = async () => {
   try {
     const res = await request.get(endpoints['getUser'], {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 
@@ -23,7 +23,7 @@ export const currentEmailOTP = async () => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       },
     );
@@ -39,7 +39,7 @@ export const currentPhoneOTP = async () => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       },
     );
@@ -152,11 +152,11 @@ export const updateProfile = async (data) => {
   try {
     let res = await request.put(endpoints['updateProfile'], data, {
       headers: {
-        Authorization: 'Bearer ' + cookies.load('token'),
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(res);
+
     return res.data;
   } catch (e) {
     return false;
@@ -176,11 +176,11 @@ export const changePassword = async (newPassword, oldPassword, otp) => {
         headers: {
           accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       },
     );
-    console.log(res);
+
     return res.success;
   } catch (e) {
     return false;
@@ -196,13 +196,13 @@ export const confirmPhone = async (otp) => {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
 
           'Content-Type': 'application/json',
         },
       },
     );
-    console.log(res);
+
     return res.data;
   } catch (e) {
     return false;
@@ -218,13 +218,12 @@ export const confirmEmail = async (otp) => {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + cookies.load('token'),
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
 
           'Content-Type': 'application/json',
         },
       },
     );
-    console.log(res);
     return res.data;
   } catch (e) {
     return false;

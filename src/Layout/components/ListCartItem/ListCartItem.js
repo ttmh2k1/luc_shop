@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCart, updateCount } from '~/ActionCreators/CartCreator';
 import Button from '~/components/Button';
 import CartItem from './CartItem';
 import * as cartAPI from '~/api/cartApi';
@@ -7,23 +9,19 @@ import classNames from 'classnames/bind';
 import styles from './ListCartItem.module.scss';
 const cx = classNames.bind(styles);
 
-function ListCartItem({ listItems }) {
+function ListCartItem() {
   const commas = (str) => {
     return str.replace(/.(?=(?:.{3})+$)/g, '$&.');
   };
-  const [state, setState] = useState([]);
+  const cart = useSelector((state) => state.cart.cart);
+  const count = useSelector((state) => state.cart.count);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (listItems) {
-      setState(listItems);
-    }
-  }, [listItems]);
-
-  const total = state
+  const total = cart
     .map(
       (item) =>
         item.productVariation.price *
-        (1 - item.productVariation.discount / 100) *
+        ((100 - item.productVariation.discount) / 100) *
         item.quantity,
     )
     .reduce((acc, item) => acc + item, 0);
@@ -34,7 +32,7 @@ function ListCartItem({ listItems }) {
     return result;
   };
 
-  const handleRemoveItem = (key) => {
+  const handleRemoveItem = (key, indexCart) => {
     swal({
       title: 'Do you want to remove this item??',
       text: 'Let confirm your decision!!',
@@ -45,7 +43,12 @@ function ListCartItem({ listItems }) {
       if (willDelete) {
         if (removeCart(key)) {
           swal('Your item was removed!', '', 'success');
-          window.location.reload();
+
+          dispatch(
+            updateCart(cart.filter((item, index) => index !== indexCart)),
+          );
+
+          dispatch(updateCount(count - cart[indexCart].quantity));
         } else {
           swal("Can't removed that!", '', 'error');
         }
@@ -65,16 +68,15 @@ function ListCartItem({ listItems }) {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        console.log(state);
-        const check = state
+        const check = cart
           .map((item) => removeCart(item.productVariation.id))
           .every((item) => item);
 
-        console.log(check);
-
         if (check) {
           swal('Your item was removed!', '', 'success');
-          window.location.reload();
+          dispatch(updateCart([]));
+
+          dispatch(updateCount(0));
         } else {
           swal("Can't removed that!", '', 'error');
         }
@@ -97,17 +99,19 @@ function ListCartItem({ listItems }) {
           />
         </div>
         <div className={cx('content')}>
-          {state.map((item, index) => {
+          {cart.map((item, index) => {
             return (
-              <div className={cx('item')} key={index}>
+              <div className={cx('item')} key={item.productVariation.id}>
                 <Button
                   text={true}
                   children={'x'}
                   className={cx('btn-delete')}
-                  onClick={() => handleRemoveItem(item.productVariation.id)}
+                  onClick={() =>
+                    handleRemoveItem(item.productVariation.id, index)
+                  }
                 />
                 <div className={cx('cart-item')}>
-                  <CartItem product={item} />
+                  <CartItem product={item} indexList={index} />
                 </div>
               </div>
             );
@@ -124,12 +128,12 @@ function ListCartItem({ listItems }) {
           </div>
           <div className={cx('des-item')}>
             <span className={cx('label')}>Delivery Fee</span>
-            <span className={cx('value')}>30.000 VND</span>
+            <span className={cx('value')}>0.0 VND</span>
           </div>
         </div>
         <div className={cx('total')}>
           <span className={cx('label')}>Total</span>
-          <span className={cx('value')}>{commas(total + 30000 + '')} VND</span>
+          <span className={cx('value')}>{commas(total + '')} VND</span>
         </div>
       </div>
     </div>

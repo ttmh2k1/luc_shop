@@ -1,14 +1,21 @@
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 const initState = {
-  user: cookies.load('user'),
-  email: cookies.load('email'),
-  phone: cookies.load('phone'),
-  otp: cookies.load('otp'),
+  user: localStorage.getItem('user'),
+  token: localStorage.getItem('token'),
+  email: localStorage.getItem('email'),
+  phone: localStorage.getItem('phone'),
+  otp: localStorage.getItem('otp'),
 };
 
 const userReducer = (state = initState, action) => {
   switch (action.type) {
     case 'USER_LOGIN':
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+      };
+    case 'UPDATE_USER':
       return {
         ...state,
         user: action.payload,
@@ -17,6 +24,7 @@ const userReducer = (state = initState, action) => {
       return {
         ...state,
         user: null,
+        token: null,
       };
     case 'RESET_PASSWORD':
       return {

@@ -8,7 +8,6 @@ import styles from './ListAddress.module.scss';
 
 const cx = classNames.bind(styles);
 const ListAddress = ({ listAddress }) => {
-  console.log(listAddress);
   const [defaultAddress, setDefaultAddress] = useState(0);
   const [list, setList] = useState(listAddress);
   const [addressEdit, setAddressEdit] = useState(false);

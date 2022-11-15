@@ -1,7 +1,7 @@
 import Form from '~/Layout/components/Form';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -30,9 +30,9 @@ function ResetPasswordComponent() {
     const reset = async () => {
       const result = await userAPI.resetPassword(email, phone, password, otp);
 
-      cookies.remove('email', email);
-      cookies.remove('phone', phone);
-      cookies.remove('otp', otp);
+      localStorage.removeItem('email', email);
+      localStorage.removeItem('phone', phone);
+      localStorage.removeItem('otp', otp);
 
       if (result) {
         swal('Reset password successful!', 'Go to Login', 'success');
@@ -51,9 +51,9 @@ function ResetPasswordComponent() {
 
   const goBack = (e) => {
     e.preventDefault();
-    cookies.remove('email');
-    cookies.remove('phone');
-    cookies.remove('otp');
+    localStorage.removeItem('email');
+    localStorage.removeItem('phone');
+    localStorage.removeItem('otp');
     navigate('/login');
   };
   return (

@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { logout as logoutAction } from '~/ActionCreators/UserCreator';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 import classNames from 'classnames/bind';
 import styles from './AccountMenu.module.scss';
@@ -18,10 +18,8 @@ function AccountMenu({ className }) {
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
-    cookies.remove('token');
-    cookies.remove('user');
-    cookies.remove('count');
 
+    localStorage.clear();
     dispatch(logoutAction());
     navigate('/login');
   };
@@ -29,24 +27,22 @@ function AccountMenu({ className }) {
     <div className={classes}>
       <div className={cx('container')}>
         <ul className={cx('content')}>
-          <a href="/profile">
+          <Link to="/profile">
             <li className={cx('item')}>
               <FontAwesomeIcon icon={faUser} className={cx('icon')} />
 
               <span className={cx('text')}>Profile</span>
             </li>
-          </a>
-          <a href="/">
+          </Link>
+          <div onClick={(e) => logout(e)}>
             <li className={cx('item')}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className={cx('icon')}
               />
-              <span className={cx('text')} onClick={(e) => logout(e)}>
-                Sign out
-              </span>
+              <span className={cx('text')}>Sign out</span>
             </li>
-          </a>
+          </div>
         </ul>
       </div>
     </div>

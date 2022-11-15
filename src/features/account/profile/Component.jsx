@@ -11,13 +11,12 @@ import DefaultAvatar from '~/commons/assets/default-avt.png';
 import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
 import swal from 'sweetalert';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 
 const cx = classNames.bind(styles);
 
 function ProfileComponent() {
   const user = useSelector((state) => state.user.user);
-  console.log(user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -106,14 +105,13 @@ function ProfileComponent() {
 
       const result = await userAPI.updateProfile(data);
 
-      console.log(result);
       if (result) {
-        cookies.remove('user');
-        console.log(result);
-        cookies.save('user', result);
+        localStorage.removeItem('user');
+
+        localStorage.setItem('user', result);
 
         dispatch(login(result));
-        navigate(0);
+        //navigate(0);
         swal('Change profile successful!!', '', 'success');
       } else {
         swal('Failed!!', '', 'error');

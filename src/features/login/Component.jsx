@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { login as loginAction } from '~/ActionCreators/UserCreator';
-import cookies from 'react-cookies';
+//import cookies from 'react-cookies';
 import Form from '~/Layout/components/Form';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
@@ -29,8 +29,8 @@ function LoginComponent() {
     const result = await userAPI.currentUser();
     if (result) {
       swal('Login Success!', 'Click oke!', 'success');
-      cookies.save('user', result);
-      dispatch(loginAction(result));
+      localStorage.setItem('user', result);
+      dispatch(loginAction({ user: result, token: token }));
     } else {
       swal('Failed Login!', 'Try again!', 'error');
     }
@@ -38,7 +38,7 @@ function LoginComponent() {
 
   useEffect(() => {
     if (token) {
-      cookies.save('token', token);
+      localStorage.setItem('token', token);
       getUser();
       swal('Login Success!', 'Click oke!', 'success');
       navigate('/');
@@ -52,10 +52,10 @@ function LoginComponent() {
     const result = await userAPI.login(username, password);
     if (result) {
       swal('Login Success!', 'Click oke!', 'success');
-      cookies.save('token', result.token);
-      cookies.save('user', result.userInfo);
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', result.userInfo);
 
-      dispatch(loginAction(result.userInfo));
+      dispatch(loginAction({ user: result.userInfo, token: result.token }));
       navigate('/');
     } else {
       swal('Failed Login!', 'Try again!', 'error');
