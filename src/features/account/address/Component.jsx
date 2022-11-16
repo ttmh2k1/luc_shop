@@ -19,6 +19,7 @@ function AddressComponent() {
   let { add } = useParams();
   const getListAddress = async () => {
     const result = await addressAPI.getAddress();
+    console.log('getlistaddress');
     setListAddress(result);
   };
 
@@ -26,6 +27,10 @@ function AddressComponent() {
     getListAddress();
     add = 0;
   }, [add]);
+
+  useEffect(() => {
+    getListAddress();
+  }, [listAddress]);
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -61,7 +66,11 @@ function AddressComponent() {
                 newAddress ? cx('create-address') : cx('address-hidden')
               }
             >
-              <AddressForm title="NEW ADDRESS" size={listAddress.length} />
+              <AddressForm
+                title="NEW ADDRESS"
+                size={listAddress.length}
+                setListAddress={setListAddress}
+              />
             </div>
           </div>
         </div>

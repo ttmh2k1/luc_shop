@@ -93,17 +93,12 @@ function OrderItem({ item }) {
                           : cx('')
                       }
                     >
-                      {commas(
-                        (
-                          (product.productVariation.price * 100) /
-                          (100 - product.productVariation.discount)
-                        ).toFixed(0) + '',
-                      )}{' '}
+                      {commas(product.productVariation.price + '')}
                       VND
                     </span>
                     {product.productVariation.discount > 0 && (
                       <span className={cx('sale-price')}>
-                        {commas(product.productVariation.price + '')} VND
+                        {commas(product.unitPrice * product.quantity + '')} VND
                       </span>
                     )}
                   </div>
@@ -115,7 +110,7 @@ function OrderItem({ item }) {
 
         <div className={cx('total')}>
           <span className={cx('label')}>Total:</span>
-          <span className={cx('value')}>{commas(item.price + '')} VND</span>
+          <span className={cx('value')}>{commas(item.payPrice + '')} VND</span>
         </div>
         <div className={cx('bottom')}>
           <div className={cx('sub-detail')}>
@@ -125,8 +120,8 @@ function OrderItem({ item }) {
           <div className={cx('action')}>
             {(status(item.status) === 'Delivered' ||
               status(item.status) === 'Completed') && (
-              <Button primary children="Comment" className={cx('btn-order')} />
-            )}
+                <Button primary children="Comment" className={cx('btn-order')} />
+              )}
             <Button
               primary
               children="Order again"

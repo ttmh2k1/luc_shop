@@ -138,10 +138,10 @@ function DescriptsProduct({ product = {} }) {
                 :
                 {state > -1 &&
                   '  ' +
-                    product.variations[state.key].variationName
-                      .split(' ')
-                      .filter((item, index) => index < 5)
-                      .join(' ')}
+                  product.variations[state.key].variationName
+                    .split(' ')
+                    .filter((item, index) => index < 5)
+                    .join(' ')}
               </span>
               <div className={cx('options')}>
                 {product.variations.map((item, index) => {
@@ -157,9 +157,9 @@ function DescriptsProduct({ product = {} }) {
                         setState(
                           state.key === index
                             ? {
-                                key: -1,
-                                id: -1,
-                              }
+                              key: -1,
+                              id: -1,
+                            }
                             : { key: index, id: item.id },
                         )
                       }
@@ -184,13 +184,12 @@ function DescriptsProduct({ product = {} }) {
               onClick={(e) => addToCart(e)}
             />
 
-            <Button
+            {/* <Button
               primary
               children={'Buy Now'}
               className={cx('btn')}
               onClick={(e) => buyNow(e)}
-              to="/cart"
-            />
+            /> */}
           </div>
         </div>
       </div>

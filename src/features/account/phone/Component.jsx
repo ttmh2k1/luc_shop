@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 //import cookies from 'react-cookies';
-import { login } from '~/ActionCreators/UserCreator';
+import { update } from '~/ActionCreators/UserCreator';
 import * as userAPI from '~/api/userApi';
 import classNames from 'classnames/bind';
 import styles from './Phone.module.scss';
@@ -35,10 +35,9 @@ function PhoneComponent() {
     if (result) {
       swal('Successful!!', '', 'success');
       localStorage.removeItem('user');
-
       localStorage.setItem('user', result);
 
-      dispatch(login(result));
+      dispatch(update(result));
       //navigate(0);
     } else {
       swal('Failed!!', '', 'error');

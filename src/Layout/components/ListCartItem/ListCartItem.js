@@ -16,7 +16,7 @@ function ListCartItem() {
   const cart = useSelector((state) => state.cart.cart);
   const count = useSelector((state) => state.cart.count);
   const dispatch = useDispatch();
-
+  console.log('cart ' + cart)
   const total = cart
     .map(
       (item) =>
