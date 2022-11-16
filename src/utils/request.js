@@ -24,8 +24,8 @@ export let endpoints = {
 };
 
 const request = axios.create({
-  // baseURL: 'http://localhost:8080/api/',
-  baseURL: 'http://fifty-donkeys-hide-203-113-147-184.loca.lt/api/',
+  baseURL: 'http://localhost:8080/api/',
+  //baseURL: 'https://tidy-states-pick-203-113-147-184.loca.lt/api/',
 });
 
 export const get = async (path, options = []) => {

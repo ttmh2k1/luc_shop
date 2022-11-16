@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login } from '~/ActionCreators/UserCreator';
+import { update as upadateUSer } from '~/ActionCreators/UserCreator';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
 import * as userAPI from '~/api/userApi';
@@ -18,6 +18,7 @@ const cx = classNames.bind(styles);
 function ProfileComponent() {
   const user = useSelector((state) => state.user.user);
 
+  console.log(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,6 +48,15 @@ function ProfileComponent() {
       avatar && URL.revokeObjectURL(avatar);
     };
   }, [avatar]);
+
+  useEffect(() => {
+    setFullname(user.fullname);
+    setUsername(user.username);
+    setPhone(user.phone);
+    setEmail(user.email);
+    setGender(user.gender);
+    setBirthday(user.dob ? user.dob.split(' ')[0] : '2022-01-01');
+  }, [user]);
 
   const sendOTP = async (e) => {
     e.preventDefault();
@@ -104,14 +114,17 @@ function ProfileComponent() {
       // data.append("avatar", avatar); // file avatar nếu có k thì k có dòng này
 
       const result = await userAPI.updateProfile(data);
+      console.log(result);
 
       if (result) {
         localStorage.removeItem('user');
 
-        localStorage.setItem('user', result);
+        const userRs = { ...result };
 
-        dispatch(login(result));
-        //navigate(0);
+        localStorage.setItem('user', userRs);
+
+        dispatch(upadateUSer(userRs));
+        navigate(0);
         swal('Change profile successful!!', '', 'success');
       } else {
         swal('Failed!!', '', 'error');

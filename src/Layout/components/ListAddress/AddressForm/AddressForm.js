@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login } from '~/ActionCreators/UserCreator';
+import { login, update } from '~/ActionCreators/UserCreator';
 import * as addressAPI from '~/api/addressApi';
 import * as userAPI from '~/api/userApi';
 import Select from '~/components/Select';
@@ -13,7 +13,7 @@ import styles from './AddressForm.module.scss';
 import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
-const AddressForm = ({ title = '', size = 0 }) => {
+const AddressForm = ({ title = '', size = 0, setListAddress }) => {
   const user = useSelector((state) => state.user.user);
   const [options, setOptions] = useState({
     City: [{ value: 0, label: 'City' }],
@@ -82,6 +82,8 @@ const AddressForm = ({ title = '', size = 0 }) => {
     if (result) {
       localStorage.removeItem('user');
       localStorage.setItem('user', result);
+      dispatch(update(result))
+      navigate(0)
     }
   };
 
@@ -96,7 +98,11 @@ const AddressForm = ({ title = '', size = 0 }) => {
 
     if (result) {
       swal('Created new Address!', '', 'success');
+      const result = await addressAPI.getAddress();
+      console.log('getlistaddress');
+      setListAddress(result);
       getCurrentUser();
+
       navigate('/address/1');
     } else swal('Failed!', '', 'error');
   };

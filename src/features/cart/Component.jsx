@@ -42,6 +42,7 @@ function CartComponent() {
 
   useEffect(() => {
     getListAddress();
+    getCart();
     setEmail(user.email);
   }, []);
 
@@ -125,7 +126,7 @@ function CartComponent() {
     // }
     const result = await orderAPI.addOrderByCart({
       note: note,
-      idAddress: address,
+      idAddress: user.defaultAddress.id,
       paymentMethod: payment,
       idProductVariations: idProductVariations,
     });
@@ -136,6 +137,8 @@ function CartComponent() {
       } else {
         swal('Success!', '', 'success');
         navigate('/history-order');
+        dispatch(updateCount(0));
+        dispatch(updateCart([]));
       }
     } else {
       swal('Failed!', '', 'error');
