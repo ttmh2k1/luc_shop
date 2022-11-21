@@ -52,12 +52,16 @@ export const addOrderByCart = async (obj = {}) => {
 
 export const cancelOrder = async (id) => {
   try {
-    const res = await request.put(endpoints['order'] + '/cancel/' + id, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
+    const res = await request.put(
+      endpoints['order'] + '/cancel/' + id,
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
       },
-    });
-
+    );
+    console.log(res);
     return res.data;
   } catch (e) {}
 };

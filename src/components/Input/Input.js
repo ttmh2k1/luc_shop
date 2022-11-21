@@ -4,7 +4,16 @@ import styles from './Input.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Input({ placeholder, type, value, id, name, className, onChange }) {
+function Input({
+  placeholder,
+  type,
+  value,
+  id,
+  name,
+  className,
+  onChange,
+  readOnly = false,
+}) {
   const classes = cx('input', {
     [className]: className,
   });
@@ -12,7 +21,7 @@ function Input({ placeholder, type, value, id, name, className, onChange }) {
   return (
     <input
       ref={ref}
-      value={value}
+      value={value ? value : ''}
       id={id}
       name={name}
       type={type}
@@ -22,6 +31,7 @@ function Input({ placeholder, type, value, id, name, className, onChange }) {
         ref.current.select();
       }}
       onChange={onChange}
+      readOnly={readOnly}
     />
   );
 }

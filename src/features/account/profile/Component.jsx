@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { update as upadateUSer } from '~/ActionCreators/UserCreator';
+import {
+  update as upadateUSer,
+  logout as logoutUser,
+} from '~/ActionCreators/UserCreator';
 import Button from '~/components/Button';
 import Input from '~/components/Input';
 import * as userAPI from '~/api/userApi';
@@ -18,7 +21,6 @@ const cx = classNames.bind(styles);
 function ProfileComponent() {
   const user = useSelector((state) => state.user.user);
 
-  console.log(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,6 +33,7 @@ function ProfileComponent() {
     user.dob ? user.dob.split(' ')[0] : '2022-01-01',
   );
   const [avatar, setAvatar] = useState(user.avatar);
+  const [avatarFile, setAvatarFile] = useState();
   const [otp, setOtp] = useState('');
 
   const [editUsername, setEditUsername] = useState(false);
@@ -39,6 +42,7 @@ function ProfileComponent() {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
+    setAvatarFile(file);
 
     setAvatar(URL.createObjectURL(file));
   };
@@ -56,6 +60,7 @@ function ProfileComponent() {
     setEmail(user.email);
     setGender(user.gender);
     setBirthday(user.dob ? user.dob.split(' ')[0] : '2022-01-01');
+    setAvatar(user.avatar);
   }, [user]);
 
   const sendOTP = async (e) => {
@@ -111,21 +116,37 @@ function ProfileComponent() {
       });
       const data = new FormData();
       data.append('info', blob);
+      if (avatarFile) {
+        data.append('avatar', avatarFile);
+      }
       // data.append("avatar", avatar); // file avatar nếu có k thì k có dòng này
 
       const result = await userAPI.updateProfile(data);
-      console.log(result);
 
       if (result) {
-        localStorage.removeItem('user');
+        if (user.username === username) {
+          localStorage.removeItem('user');
 
-        const userRs = { ...result };
+          const userRs = { ...result };
 
-        localStorage.setItem('user', userRs);
+          localStorage.setItem('user', userRs);
 
-        dispatch(upadateUSer(userRs));
-        navigate(0);
-        swal('Change profile successful!!', '', 'success');
+          dispatch(upadateUSer(userRs));
+          swal('Change profile successful!!', '', 'success');
+          setEditUsername(false);
+          setEditPhone(false);
+          setEditEmail(false);
+        } else {
+          dispatch(logoutUser());
+          swal(
+            'Change profile successful!!',
+            'Your username is changed, please login again!',
+            'success',
+          );
+          localStorage.clear();
+          navigate('/login');
+        }
+        // navigate(0);
       } else {
         swal('Failed!!', '', 'error');
       }

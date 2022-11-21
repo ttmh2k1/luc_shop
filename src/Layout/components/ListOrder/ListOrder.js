@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import OrderItem from './OrderItem';
 import classNames from 'classnames/bind';
 import styles from './ListOrder.module.scss';
 
 const cx = classNames.bind(styles);
-const ListOrder = ({ listOrder }) => {
+const ListOrder = () => {
+  const listOrder = useSelector((state) => state.user.listOrder).reverse();
+
   const [pageState, setPageState] = useState(0);
   const PAGE_SIZE = 3;
   const pageCount = listOrder.length / PAGE_SIZE;
@@ -30,8 +34,16 @@ const ListOrder = ({ listOrder }) => {
         {listOrder
           .slice(pageState * PAGE_SIZE, pageState * PAGE_SIZE + PAGE_SIZE)
           .map((item, index) => {
+            console.log('pageState ', pageState);
+            console.log(
+              'list :',
+              listOrder.slice(
+                pageState * PAGE_SIZE,
+                pageState * PAGE_SIZE + PAGE_SIZE,
+              ),
+            );
             return (
-              <div className={cx('order')} key={index}>
+              <div className={cx('order')} key={item.id}>
                 <OrderItem item={item} />
               </div>
             );

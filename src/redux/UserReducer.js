@@ -5,6 +5,8 @@ const initState = {
   email: localStorage.getItem('email'),
   phone: localStorage.getItem('phone'),
   otp: localStorage.getItem('otp'),
+  address: [],
+  listOrder: [],
 };
 
 const userReducer = (state = initState, action) => {
@@ -37,7 +39,16 @@ const userReducer = (state = initState, action) => {
         ...state,
         otp: action.otp,
       };
-
+    case 'UPDATE_ADDRESS':
+      return {
+        ...state,
+        address: action.address,
+      };
+    case 'UPDATE_ORDER':
+      return {
+        ...state,
+        listOrder: action.listOrder,
+      };
     default:
       return state;
   }

@@ -15,8 +15,6 @@ function ProductDetailsComponent() {
   const [reviews, setReviews] = useState([]);
   const [product, setProduct] = useState();
 
-  console.log(id);
-
   const getBestSeller = async () => {
     const result = await productAPI.getBestSeller();
 
@@ -45,6 +43,7 @@ function ProductDetailsComponent() {
     getProductById();
     getBestSeller();
     getProductReview();
+    window.scrollTo(0, 0);
   }, [id]);
 
   useEffect(() => {

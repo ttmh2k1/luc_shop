@@ -50,6 +50,18 @@ export const updateAddress = async (id, obj = {}) => {
   } catch (e) {}
 };
 
+export const deleteAddress = async (id) => {
+  try {
+    const res = await request.rqdelete(endpoints['address'] + '/' + id, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    });
+
+    return res.success;
+  } catch (e) {}
+};
+
 export const getAllCity = async () => {
   try {
     const res = await request.get(endpoints['sourceAddress']);

@@ -8,7 +8,6 @@ import {
 // import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { login } from '~/ActionCreators/UserCreator';
 import { publicRoutes, privateRoutes } from './routes';
 //import cookies from 'react-cookies';
 
