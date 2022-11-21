@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateAddress } from '~/ActionCreators/UserCreator';
 import Button from '~/components/Button';
 import ListAddress from '~/Layout/components/ListAddress';
 import AddressForm from '~/Layout/components/ListAddress/AddressForm';
@@ -10,27 +11,32 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import styles from './Address.module.scss';
+import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
 
 function AddressComponent() {
   const [newAddress, setNewAddress] = useState(false);
-  const [listAddress, setListAddress] = useState([]);
-  let { add } = useParams();
+  // const [listAddress, setListAddress] = useState([]);
+  const listAddress = useSelector((state) => state.user.address);
+
+  const dispatch = useDispatch();
   const getListAddress = async () => {
     const result = await addressAPI.getAddress();
-    console.log('getlistaddress');
-    setListAddress(result);
+
+    if (result) {
+      dispatch(updateAddress(result));
+    }
   };
 
   useEffect(() => {
     getListAddress();
-    add = 0;
-  }, [add]);
+  }, []);
 
   useEffect(() => {
-    getListAddress();
+    setNewAddress(false);
   }, [listAddress]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -48,7 +54,15 @@ function AddressComponent() {
                 <FontAwesomeIcon icon={faPlus} className={cx('icon')} />
               }
               onClick={() => {
-                setNewAddress(!newAddress);
+                if (listAddress.length < 10) {
+                  setNewAddress(!newAddress);
+                } else {
+                  swal(
+                    'You had 10 address',
+                    'Let delete the address before create new address',
+                    'warning',
+                  );
+                }
               }}
               className={cx('btn-add')}
             />
@@ -66,23 +80,22 @@ function AddressComponent() {
                 newAddress ? cx('create-address') : cx('address-hidden')
               }
             >
-              <AddressForm
-                title="NEW ADDRESS"
-                size={listAddress.length}
-                setListAddress={setListAddress}
-              />
+              <AddressForm title="NEW ADDRESS" />
             </div>
           </div>
         </div>
         <div className={cx('content')}>
           {listAddress.length > 0 ? (
-            <ListAddress listAddress={listAddress} />
+            <ListAddress />
           ) : (
             <span className={cx('notify')}>
               Your don't have any addresss. Let add new address
             </span>
           )}
         </div>
+        <span className={cx('count')}>
+          {'You had ' + listAddress.length + ' address'}
+        </span>
       </div>
     </div>
   );

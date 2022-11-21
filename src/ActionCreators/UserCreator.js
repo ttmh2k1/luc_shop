@@ -29,3 +29,17 @@ export function verify(otp) {
     otp: otp,
   };
 }
+
+export function updateAddress(address) {
+  return {
+    type: 'UPDATE_ADDRESS',
+    address: address,
+  };
+}
+
+export function updateOrder(listOrder) {
+  return {
+    type: 'UPDATE_ORDER',
+    listOrder: listOrder,
+  };
+}

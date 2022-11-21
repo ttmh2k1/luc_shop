@@ -26,6 +26,7 @@ function HeaderTop() {
   const dispatch = useDispatch();
 
   const [state, setState] = useState(false);
+  const [text, setText] = useState('');
   const count = useSelector((state) => state.cart.count);
   const account = useSelector((state) => state.user.user);
 
@@ -61,6 +62,8 @@ function HeaderTop() {
             <Input
               type="text"
               name="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
               placeholder="Search product"
               className={cx('input-search')}
             />

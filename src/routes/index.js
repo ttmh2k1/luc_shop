@@ -81,7 +81,7 @@ const privateRoutes = [
     layout: AccountLayout,
   },
   {
-    path: '/address/:add',
+    path: '/address',
     component: AddressPage,
     layout: AccountLayout,
   },

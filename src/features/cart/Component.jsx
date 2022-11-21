@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCart, updateCount } from '~/ActionCreators/CartCreator';
+import { updateAddress } from '~/ActionCreators/UserCreator';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import AddressForm from '~/Layout/components/ListAddress/AddressForm';
 import * as orderAPI from '~/api/orderApi';
 import * as addressAPI from '~/api/addressApi';
 import swal from 'sweetalert';
@@ -17,65 +21,69 @@ import COD from '~/commons/assets/cod.png';
 import * as cartAPI from '~/api/cartApi';
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
-import { set } from 'react-hook-form';
 
 const cx = classNames.bind(styles);
 
 function CartComponent() {
   const user = useSelector((state) => state.user.user);
   const cart = useSelector((state) => state.cart.cart);
+  const listAddress = useSelector((state) => state.user.address);
+
   const [newAddress, setNewAddress] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [payment, setPayment] = useState('OFFLINE_CASH_ON_DELIVERY');
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [listAdress, setListAddress] = useState([]);
-  const [list, setList] = useState([]);
   const [address, setAddress] = useState(0);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const shipments = [
+    {
+      id: 'payment',
 
+      name: 'COD',
+      image: COD,
+      key: 'OFFLINE_CASH_ON_DELIVERY',
+    },
+    {
+      id: 'payment',
+
+      name: 'MoMo',
+      image: Momo,
+      key: 'ONLINE_PAYMENT_MOMO',
+    },
+    // {
+    //   id: 'payment',
+
+    //   name: 'Paypal',
+    //   image: Paypal,
+    //   key: 'ONLINE_PAYMENT_PAYPAL',
+    // },
+  ];
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const success = searchParams.get('success');
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getListAddress();
     getCart();
-    setEmail(user.email);
-  }, []);
-
-  const getListAddress = async () => {
-    const result = await addressAPI.getAddress();
-    console.log(result);
-    if (result) {
-      setName(result[0].receiverName);
-      setPhone(result[0].receiverPhone);
-      setListAddress(result);
+    if (user.defaultAddress) {
+      setAddress(user.defaultAddress.id);
+      setEmail(user.email);
+      setName(user.defaultAddress.receiverName);
+      setPhone(user.defaultAddress.receiverPhone);
     }
-  };
+  }, [user]);
 
-  const getCart = async () => {
-    const result = await cartAPI.getCart();
-    if (result) {
-      dispatch(updateCart(result));
+  useEffect(() => {
+    setNewAddress(false);
+    if (user.defaultAddress) {
+      changeAddress(user.defaultAddress.id);
     }
-  };
-
-  // useEffect(() => {
-  //   if (user.defaultAddress) {
-  //     if (user.phoneConfirmed) {
-  //       getCart();
-  //     } else {
-  //       swal("Haven't ever confirm phone", 'Please confirm phone', 'warning');
-  //       // navigate('/phone');
-  //     }
-  //   } else {
-  //     swal("Don't have address", 'Please add address', 'warning');
-  //     // navigate('/address');
-  //   }
-  // }, []);
+  }, [listAddress]);
 
   useEffect(() => {
     if (success) {
@@ -90,43 +98,27 @@ function CartComponent() {
     }
   }, []);
 
-  // const updateAddress = async () => {
-  //   const result = await addressAPI.updateAddress(user.defaultAddress.id, {
-  //     idAddressWard: ward,
-  //     addressDetail: addressDetail,
-  //     receiverName: name,
-  //     receiverPhone: phone,
-  //     isDefault: true,
-  //   });
-  // };
+  const getListAddress = async () => {
+    const result = await addressAPI.getAddress();
 
-  // const addAddress = async () => {
-  //   const result = await addressAPI.addAddress({
-  //     idAddressWard: ward,
-  //     addressDetail: addressDetail,
-  //     receiverName: name,
-  //     receiverPhone: phone,
-  //     isDefault: true,
-  //   });
-  // };
+    if (result) {
+      dispatch(updateAddress(result));
+    }
+  };
+
+  const getCart = async () => {
+    const result = await cartAPI.getCart();
+    if (result) {
+      dispatch(updateCart(result));
+    }
+  };
 
   const addOrderByCart = async () => {
     const idProductVariations = cart.map((item) => item.productVariation.id);
-    // if (user.defaultAddress) {
-    //   if (
-    //     user.defaultAddress.addressWard.id !== ward ||
-    //     user.defaultAddress.addressDetail !== addressDetail ||
-    //     user.defaultAddress.receiverName !== name ||
-    //     user.defaultAddress.receiverPhone !== phone
-    //   ) {
-    //     updateAddress();
-    //   }
-    // } else {
-    //   addAddress();
-    // }
+
     const result = await orderAPI.addOrderByCart({
       note: note,
-      idAddress: user.defaultAddress.id,
+      idAddress: address,
       paymentMethod: payment,
       idProductVariations: idProductVariations,
     });
@@ -154,32 +146,44 @@ function CartComponent() {
     }
   };
 
-  const shipments = [
-    {
-      id: 'payment',
+  const changeAddress = (index) => {
+    setAddress(index);
 
-      name: 'COD',
-      image: COD,
-      key: 'OFFLINE_CASH_ON_DELIVERY',
-    },
-    {
-      id: 'payment',
-
-      name: 'MoMo',
-      image: Momo,
-      key: 'ONLINE_PAYMENT_MOMO',
-    },
-    // {
-    //   id: 'payment',
-
-    //   name: 'Paypal',
-    //   image: Paypal,
-    //   key: 'ONLINE_PAYMENT_PAYPAL',
-    // },
-  ];
+    const selectAddress = listAddress.find(
+      (item) => item.id === parseInt(index),
+    );
+    if (selectAddress) {
+      setName(selectAddress.receiverName);
+      setPhone(selectAddress.receiverPhone);
+    }
+  };
 
   return (
     <div className={cx('wrapper')}>
+      <div className={cx('new-address')}>
+        <Button
+          children="New address"
+          text={true}
+          rightIcon={
+            <FontAwesomeIcon icon={faCirclePlus} className={cx('icon-plus')} />
+          }
+          onClick={() => {
+            setNewAddress(!newAddress);
+          }}
+        />
+
+        <div
+          className={newAddress ? cx('background') : cx('background-hidden')}
+          onClick={() => {
+            setNewAddress(!newAddress);
+          }}
+        ></div>
+        <div
+          className={newAddress ? cx('create-address') : cx('address-hidden')}
+        >
+          <AddressForm title="NEW ADDRESS" />
+        </div>
+      </div>
       <div className={cx('form')}>
         <FormPayment
           title="SHIPPING INFORMATION"
@@ -194,6 +198,7 @@ function CartComponent() {
                 className={cx('input', 'name-input', 'payment-input')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                readOnly={true}
               />
               <Input
                 type="text"
@@ -201,6 +206,7 @@ function CartComponent() {
                 className={cx('input', 'phone-input', 'payment-input')}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                readOnly={true}
               />
             </div>
             <Input
@@ -209,13 +215,14 @@ function CartComponent() {
               className={cx('input', 'payment-input')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              readOnly={true}
             />
 
             <div className={cx('address-option')}>
               <Select
                 options={
-                  listAdress
-                    ? listAdress.map((item) => {
+                  listAddress
+                    ? listAddress.map((item) => {
                         const id = 'addres';
                         const value = item.id;
                         const label =
@@ -238,17 +245,10 @@ function CartComponent() {
                 }
                 className={cx('select')}
                 select={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => {
+                  changeAddress(e.target.value);
+                }}
               />
-              {/* <div className={cx('add-address')}>
-                <Button
-                  children="New Address"
-                  text
-                  onClick={() => {
-                    setNewAddress(!newAddress);
-                  }}
-                />
-              </div> */}
             </div>
 
             <Input

@@ -63,7 +63,7 @@ function ProfileBar() {
                       Email
                     </span>
                   </Link>
-                  <Link to="/address/0">
+                  <Link to="/address">
                     <span className={cx('active-name', 'active-sub')}>
                       Address
                     </span>

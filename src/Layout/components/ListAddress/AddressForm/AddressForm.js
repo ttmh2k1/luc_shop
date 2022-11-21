@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login, update } from '~/ActionCreators/UserCreator';
+import { update, updateAddress } from '~/ActionCreators/UserCreator';
 import * as addressAPI from '~/api/addressApi';
 import * as userAPI from '~/api/userApi';
 import Select from '~/components/Select';
@@ -13,13 +13,15 @@ import styles from './AddressForm.module.scss';
 import swal from 'sweetalert';
 
 const cx = classNames.bind(styles);
-const AddressForm = ({ title = '', size = 0, setListAddress }) => {
-  const user = useSelector((state) => state.user.user);
+const AddressForm = ({ title = '', edit = false, addressEdit }) => {
   const [options, setOptions] = useState({
     City: [{ value: 0, label: 'City' }],
     District: [{ value: 0, label: 'District' }],
     Ward: [{ value: 0, label: 'Ward' }],
   });
+
+  const listAddress = useSelector((state) => state.user.address);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,23 +29,38 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
   const [city, setCity] = useState(0);
   const [district, setDistrict] = useState(0);
   const [ward, setWard] = useState(0);
-  const [addressDetail, setAdressDetail] = useState('');
+  const [addressDetail, setAddressDetail] = useState('');
   const [fullname, setFullname] = useState('');
   const [phone, setPhone] = useState('');
-  const isDefault = size > 0 ? false : true;
+  const isDefault = true;
 
   const getAllCity = async () => {
     const result = await addressAPI.getAllCity();
 
-    setOptions({
-      ...options,
-      City: [
-        ...options.City,
-        ...result.map((city) => {
-          return { value: city.id, label: city.name };
-        }),
-      ],
-    });
+    if (result) {
+      setOptions({
+        ...options,
+        City: [
+          // ...options.City,
+          { value: 0, label: 'City' },
+          ...result.map((city) => {
+            return { value: city.id, label: city.name };
+          }),
+        ],
+      });
+    }
+
+    if (edit) {
+      if (addressEdit) {
+        console.log('get list city ', options);
+        console.log(
+          'id city ',
+          addressEdit.addressWard.district.provinceCity.id,
+        );
+        setCity(addressEdit.addressWard.district.provinceCity.id);
+        setFullname(addressEdit.receiverName);
+      }
+    }
   };
 
   const getDistrictOfCity = async (id) => {
@@ -60,6 +77,15 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
         Ward: [{ value: 0, label: 'Ward' }],
       });
     }
+
+    if (edit) {
+      if (addressEdit) {
+        console.log('get list district ', options);
+        console.log('id district ', addressEdit.addressWard.district.id);
+        setDistrict(addressEdit.addressWard.district.id);
+        setPhone(addressEdit.receiverPhone);
+      }
+    }
   };
 
   const getWardOfDistrict = async (id) => {
@@ -75,6 +101,15 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
         ],
       });
     }
+
+    if (edit) {
+      if (addressEdit) {
+        console.log('get list ward ', options);
+        console.log('id ward ', addressEdit.addressWard.id);
+        setWard(addressEdit.addressWard.id);
+        setAddressDetail(addressEdit.addressDetail);
+      }
+    }
   };
 
   const getCurrentUser = async () => {
@@ -82,8 +117,8 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
     if (result) {
       localStorage.removeItem('user');
       localStorage.setItem('user', result);
-      dispatch(update(result))
-      navigate(0)
+      dispatch(update(result));
+      // navigate(0);
     }
   };
 
@@ -98,18 +133,50 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
 
     if (result) {
       swal('Created new Address!', '', 'success');
-      const result = await addressAPI.getAddress();
-      console.log('getlistaddress');
-      setListAddress(result);
+
+      dispatch(updateAddress([...listAddress, result]));
+
+      setPhone('');
+      setFullname('');
+      setAddressDetail('');
+      setCity(0);
+      setDistrict(0);
+      setWard(0);
       getCurrentUser();
 
-      navigate('/address/1');
+      // navigate('/address');
+    } else swal('Failed!', '', 'error');
+  };
+
+  const editAddress = async () => {
+    const result = await addressAPI.updateAddress(addressEdit.id, {
+      idAddressWard: ward,
+      addressDetail: addressDetail,
+      receiverName: fullname,
+      receiverPhone: phone,
+      isDefault: addressEdit.id === user.defaultAddress.id,
+    });
+
+    if (result) {
+      swal('Edit Address successfully!', '', 'success');
+
+      dispatch(
+        updateAddress(
+          listAddress.map((item) =>
+            item.id === addressEdit.id ? result : item,
+          ),
+        ),
+      );
     } else swal('Failed!', '', 'error');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addAddress();
+    if (edit) {
+      editAddress();
+    } else {
+      addAddress();
+    }
   };
 
   useEffect(() => {
@@ -117,11 +184,15 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
   }, []);
 
   useEffect(() => {
-    getDistrictOfCity(city);
+    if (options.City.length > 1) {
+      getDistrictOfCity(city);
+    }
   }, [city]);
 
   useEffect(() => {
-    getWardOfDistrict(district);
+    if (options.District.length > 1) {
+      getWardOfDistrict(district);
+    }
   }, [district]);
 
   return (
@@ -156,7 +227,7 @@ const AddressForm = ({ title = '', size = 0, setListAddress }) => {
               type="text"
               placeholder={'Address details'}
               value={addressDetail}
-              onChange={(e) => setAdressDetail(e.target.value)}
+              onChange={(e) => setAddressDetail(e.target.value)}
             />
           </div>
           <div className={cx('name')}>
