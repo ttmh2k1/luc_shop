@@ -36,6 +36,8 @@ function CartComponent() {
   const [note, setNote] = useState('');
   const [payment, setPayment] = useState('OFFLINE_CASH_ON_DELIVERY');
   const [address, setAddress] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const success = searchParams.get('success');
 
   const shipments = [
     {
@@ -60,9 +62,6 @@ function CartComponent() {
     //   key: 'ONLINE_PAYMENT_PAYPAL',
     // },
   ];
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const success = searchParams.get('success');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

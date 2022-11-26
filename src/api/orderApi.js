@@ -65,3 +65,19 @@ export const cancelOrder = async (id) => {
     return res.data;
   } catch (e) {}
 };
+
+export const createPayment = async (id) => {
+  try {
+    const res = await request.put(
+      endpoints['order'] + '/' + id + '/create-payment',
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      },
+    );
+    console.log(res);
+    return res.data;
+  } catch (e) {}
+};

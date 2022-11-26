@@ -177,13 +177,13 @@ function ProfileComponent() {
                 ) : (
                   <span className={cx('username')}>{username}</span>
                 )}
-                {!editUsername && (
+                {/* {!editUsername && (
                   <FontAwesomeIcon
                     icon={faPen}
                     className={cx('icon')}
                     onClick={() => setEditUsername(true)}
                   />
-                )}
+                )} */}
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Full name</span>

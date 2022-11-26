@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateOrder } from '~/ActionCreators/UserCreator';
+import { updateShowModal } from '~/ActionCreators/DisplayCreator';
 import * as orderAPI from '~/api/orderApi';
 import Button from '~/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-solid-svg-icons';
+import Momo from '~/commons/assets/momo.png';
+import Paypal from '~/commons/assets/paypal.png';
 import swal from 'sweetalert';
-
+import Radio from '~/components/Radio';
+import AddComment from '~/Layout/components/ProductDetails/Comment/AddComment';
 import classNames from 'classnames/bind';
 import styles from './OderItem.module.scss';
 const cx = classNames.bind(styles);
@@ -17,8 +21,27 @@ function OrderItem({ item }) {
   };
 
   const listOrder = useSelector((state) => state.user.listOrder);
+  const showModal = useSelector((state) => state.display.showModal);
+  const [formPay, setFormPay] = useState(false);
+  const [formComment, setFormComment] = useState(false);
   const [state, setState] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('ONLINE_PAYMENT_MOMO');
   const dispatch = useDispatch();
+
+  const shipments = [
+    {
+      id: 'payment',
+      name: 'MoMo',
+      image: Momo,
+      key: 'ONLINE_PAYMENT_MOMO',
+    },
+    // {
+    //   id: 'payment',
+    //   name: 'Paypal',
+    //   image: Paypal,
+    //   key: 'ONLINE_PAYMENT_PAYPAL',
+    // },
+  ];
 
   const payment = (key) => {
     switch (key) {
@@ -86,6 +109,21 @@ function OrderItem({ item }) {
       }
     });
   };
+
+  const handlePayment = () => {};
+
+  useEffect(() => {
+    setPaymentMethod(
+      item.paymentMethod ? item.paymentMethod : 'ONLINE_PAYMENT_MOMO',
+    );
+  }, [item]);
+
+  useEffect(() => {
+    if (!showModal) {
+      setFormPay(showModal);
+      setFormComment(showModal);
+    }
+  }, [showModal]);
 
   return (
     <div className={cx('wrapper')}>
@@ -165,14 +203,18 @@ function OrderItem({ item }) {
               <span>Payment: {payment(item.paymentMethod)}</span>
             </div>
             <div className={cx('action')}>
-              {(status(item.status) === 'Delivered' ||
-                status(item.status) === 'Completed') && (
+              {status(item.status) === 'Paying' && (
                 <Button
                   primary
-                  children="Comment"
                   className={cx('btn-order')}
+                  children="Pay"
+                  onClick={() => {
+                    setFormPay(true);
+                    dispatch(updateShowModal(true));
+                  }}
                 />
               )}
+
               {(status(item.status) === 'Paying' ||
                 status(item.status) === 'Confirming' ||
                 status(item.status) === 'Sending') && (
@@ -183,12 +225,63 @@ function OrderItem({ item }) {
                   onClick={() => handleCancel(item.id)}
                 />
               )}
+              {(status(item.status) === 'Delivered' ||
+                status(item.status) === 'Completed') && (
+                <Button
+                  primary
+                  children="Comment"
+                  className={cx('btn-order')}
+                  onClick={() => {
+                    setFormComment(true);
+                    dispatch(updateShowModal(true));
+                  }}
+                />
+              )}
+              {formComment && showModal && (
+                <div className={cx('form-comment')}>
+                  <AddComment
+                    listProduct={item.orderDetails}
+                    orderId={item.id}
+                  />
+                </div>
+              )}
+
+              {formPay && showModal && (
+                <div className={cx('form-pay')}>
+                  <div className={cx('form-title')}>
+                    Payment for Order : {item.id}
+                  </div>
+                  {shipments.map((item, index) => {
+                    return (
+                      <div key={index}>
+                        <Radio
+                          obj={item}
+                          checked={paymentMethod === item.key}
+                          onChange={() => setPaymentMethod(item.key)}
+                          className={cx('form-radio')}
+                        />
+                      </div>
+                    );
+                  })}
+                  <span className={cx('form-notify')}>
+                    Please choose your payment method!
+                  </span>
+                  <Button
+                    children="Pay"
+                    primary
+                    className={cx('btn-form')}
+                    onClick={() => handlePayment()}
+                  />
+                </div>
+              )}
+
               <Button
                 outline
                 children={state ? 'Close details' : 'More details'}
                 className={cx('btn-see')}
                 onClick={() => setState(!state)}
                 disabled={item.orderDetails.length < 2 && true}
+                style={{ marginLeft: '1rem' }}
               />
             </div>
           </div>
