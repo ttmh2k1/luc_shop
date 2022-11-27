@@ -10,7 +10,7 @@ function ProductDetailsImage({ listImages }) {
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         <div className={cx('content')}>
-          <div className={cx('sub-image')}>
+          <div className={cx('sub-image', 'left')}>
             {listImages.map((image, index) => {
               return (
                 <img
@@ -31,6 +31,21 @@ function ProductDetailsImage({ listImages }) {
               alt=""
               className={cx('thumbnail-image')}
             />
+          </div>
+          <div className={cx('sub-image', 'right')}>
+            {listImages.map((image, index) => {
+              return (
+                <img
+                  onMouseOver={() => {
+                    setState(index);
+                  }}
+                  key={index}
+                  src={image.url}
+                  alt=""
+                  className={cx('sub-image-item')}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

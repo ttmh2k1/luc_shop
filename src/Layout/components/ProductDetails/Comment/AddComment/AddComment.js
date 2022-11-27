@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import * as commentAPI from '~/api/commentApi';
+import * as orderAPI from '~/api/orderApi';
 import { useDispatch } from 'react-redux';
+import { updateOrder } from '~/ActionCreators/UserCreator';
 import { updateShowModal } from '~/ActionCreators/DisplayCreator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -51,6 +53,10 @@ function AddComment({ listProduct = [], orderId }) {
         'success',
       );
       dispatch(updateShowModal(false));
+      const newListOrder = await orderAPI.getOrder();
+      if (newListOrder) {
+        dispatch(updateOrder(newListOrder));
+      }
     } else {
       swal('Have one error!', 'Please try again!', 'error');
     }
@@ -91,24 +97,33 @@ function AddComment({ listProduct = [], orderId }) {
                 <div className={subProduct ? cx('list-product') : cx('hidden')}>
                   {listProduct.map((item) => {
                     return (
-                      <div
-                        className={cx('item')}
-                        key={item.productVariation.id}
-                        onClick={() =>
-                          setProductSelected(item.productVariation.id)
-                        }
-                      >
-                        <img
-                          src={item.productVariation.product.avatar}
-                          alt=""
-                        />
-                        <span>
-                          {item.productVariation.product.name
-                            .split(' ')
-                            .filter((item, index) => index < 4)
-                            .join(' ')}
-                        </span>
-                      </div>
+                      !item.reviewed && (
+                        <div
+                          className={cx('item')}
+                          key={item.productVariation.id}
+                          onClick={() => {
+                            setProductSelected(item.productVariation.id);
+                            setSubProduct(false);
+                          }}
+                        >
+                          <img
+                            src={item.productVariation.product.avatar}
+                            alt=""
+                          />
+                          <div className={cx('product-details')}>
+                            <span>
+                              {item.productVariation.product.name
+                                .split(' ')
+                                .filter((item, index) => index < 4)
+                                .join(' ')}
+                            </span>
+                            <span className={cx('variation')}>
+                              {item.productVariation.tier} {': '}
+                              {item.productVariation.variationName}
+                            </span>
+                          </div>
+                        </div>
+                      )
                     );
                   })}
                 </div>

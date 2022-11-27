@@ -9,12 +9,16 @@ const Form = ({
   height = '48rem',
   children,
   onSubmit,
+  className,
 }) => {
+  const classes = cx('form', {
+    [className]: className,
+  });
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         <form
-          className={cx('form')}
+          className={classes}
           style={{
             width: width,
             height: height,

@@ -41,7 +41,7 @@ function ListProduct({ listProduct = [] }) {
 
   const handleClickNext = () => {
     productRef.current.style.transition = 'transform 0.3s';
-    productRef.current.style.transform = `translateX(-51.55%) translateX(0px)`;
+    productRef.current.style.transform = `translateX(-60rem) translateX(0px)`;
     nextProduct();
   };
 
@@ -55,7 +55,7 @@ function ListProduct({ listProduct = [] }) {
         }
       });
       productRef.current.style.transition = 'transform 0s';
-      productRef.current.style.transform = `translateX(-26%) translateX(0px)`;
+      productRef.current.style.transform = `translateX(-30rem) translateX(0px)`;
     }, 300);
   };
 
@@ -75,7 +75,7 @@ function ListProduct({ listProduct = [] }) {
         }
       });
       productRef.current.style.transition = 'transform 0s';
-      productRef.current.style.transform = `translateX(-25.6%) translateX(0px)`;
+      productRef.current.style.transform = `translateX(-30rem) translateX(0px)`;
     }, 300);
   };
 

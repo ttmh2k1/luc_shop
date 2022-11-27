@@ -5,7 +5,11 @@ import Button from '~/components/Button';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { resetPassword } from '~/ActionCreators/UserCreator';
+import classNames from 'classnames/bind';
+import styles from './ForgotPassword.module.scss';
 //import cookies from 'react-cookies';
+
+const cx = classNames.bind(styles);
 
 function ForgotComponent() {
   const [phone, setPhone] = useState('');
@@ -26,8 +30,10 @@ function ForgotComponent() {
       height="34rem"
       titleSize="3.2rem"
       onSubmit={(e) => handleSubmit(e)}
+      className={cx('form')}
     >
       <div
+        className={cx('form-content')}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -41,6 +47,7 @@ function ForgotComponent() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
+          className={cx('input')}
         />
         <Input
           type="email"
@@ -48,9 +55,10 @@ function ForgotComponent() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className={cx('input')}
         />
 
-        <div style={{ marginTop: '2rem' }}>
+        <div style={{ marginTop: '2rem' }} className={cx('bottom')}>
           <Button primary children="VERIFY" rounded large />
           <div
             style={{ with: '100%', display: 'flex', justifyContent: 'center' }}

@@ -61,23 +61,36 @@ export const cancelOrder = async (id) => {
         },
       },
     );
-    console.log(res);
+
     return res.data;
   } catch (e) {}
 };
 
-export const createPayment = async (id) => {
+export const updateOrder = async (id, data) => {
   try {
     const res = await request.put(
-      endpoints['order'] + '/' + id + '/create-payment',
-      {},
+      endpoints['order'] + '/' + id + '/update',
+      data,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       },
     );
-    console.log(res);
+    return res.data;
+  } catch (e) {}
+};
+
+export const createPayment = async (id) => {
+  try {
+    const res = await request.get(
+      endpoints['order'] + '/' + id + '/create-payment',
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      },
+    );
     return res.data;
   } catch (e) {}
 };

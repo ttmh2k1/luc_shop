@@ -29,3 +29,42 @@
   gap: 2rem;
   margin-top: 11.4rem;
 }
+
+.profile-menu-fixed {
+  position: fixed;
+  top: 11.4rem;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+@media only screen and (min-width: 360px) {
+  .profile-menu {
+    display: none;
+  }
+
+  .profile-menu-fixed {
+    display: flex;
+    top: 7.4rem;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .profile-menu {
+    display: none;
+  }
+
+  .profile-menu-fixed {
+    top: 11.4rem;
+    display: flex;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .profile-menu {
+    display: flex;
+  }
+
+  .profile-menu-fixed {
+    top: 11.4rem;
+    display: none;
+  }
+}

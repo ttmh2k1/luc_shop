@@ -90,6 +90,7 @@ function LoginComponent() {
             href="/forgot-password"
             children="Forgot password"
             style={{ color: '#000' }}
+            className={cx('btn-forgot')}
           />
         </div>
         <div className={cx('btn')}>

@@ -4,6 +4,7 @@ import { updateShowModal } from '~/ActionCreators/DisplayCreator';
 import Header from '~/Layout/components/Header';
 import Footer from '~/Layout/components/Footer';
 import ProfileBar from '~/Layout/components/ProfileBar';
+import ProfileBarFixed from '~/Layout/components/ProfileBarFixed';
 import classNames from 'classnames/bind';
 import styles from './AccountLayout.module.scss';
 
@@ -33,6 +34,9 @@ function AccountLayout({ children }) {
       <div className={cx('container')}>
         <div className={cx('profile-menu')}>
           <ProfileBar />
+        </div>
+        <div className={cx('profile-menu-fixed')}>
+          <ProfileBarFixed />
         </div>
         <div className={cx('content')}> {children}</div>
       </div>

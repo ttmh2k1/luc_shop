@@ -159,9 +159,14 @@ function CartComponent() {
 
   return (
     <div className={cx('wrapper')}>
+      <div className={cx('cart-details', 'left')}>
+        <ListCartItem />
+      </div>
       <div className={cx('new-address')}>
+        <span className={cx('children-btn')}>New address</span>
         <Button
-          children="New address"
+          className={cx('btn-new')}
+          children=""
           text={true}
           rightIcon={
             <FontAwesomeIcon icon={faCirclePlus} className={cx('icon-plus')} />
@@ -280,7 +285,8 @@ function CartComponent() {
           </div>
         </FormPayment>
       </div>
-      <div className={cx('cart-details')}>
+
+      <div className={cx('cart-details', 'right')}>
         <ListCartItem />
       </div>
     </div>

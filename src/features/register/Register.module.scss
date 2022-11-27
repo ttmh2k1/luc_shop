@@ -32,11 +32,63 @@
 }
 
 .bottom {
-  margin-top: 1rem;
+  margin-top: 0rem;
 }
 
 .sign-in {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+@media only screen and (min-device-width: 360px) {
+  .input {
+    font-size: 1.4rem;
+    padding: 1rem 2rem;
+  }
+
+  .radio-gender {
+    padding: 0.5rem 2rem;
+    font-size: 1.4rem;
+  }
+
+  .btn-sign-up {
+    font-size: 1.4rem;
+    padding: 1rem;
+  }
+
+  .btn-sign-in {
+    font-size: 1.4rem;
+    margin-top: 0rem;
+  }
+
+  .bottom {
+    margin-top: 0;
+  }
+}
+
+@media only screen and (min-device-width: 768px) {
+  .input {
+    font-size: 1.6rem;
+    padding: 1rem 2rem;
+  }
+
+  .radio-gender {
+    padding: 0.5rem 2rem;
+    font-size: 1.6rem;
+  }
+
+  .btn-sign-up {
+    font-size: 1.6rem;
+    padding: 10px 28px;
+  }
+
+  .btn-sign-in {
+    font-size: 1.4rem;
+    margin-top: -1rem;
+  }
+
+  .bottom {
+    margin-top: 0rem;
+  }
 }

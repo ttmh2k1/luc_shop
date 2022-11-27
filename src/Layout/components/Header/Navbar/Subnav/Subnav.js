@@ -6,9 +6,12 @@ import styles from './Subnav.module.scss';
 
 const cx = classNames.bind(styles);
 
-function SubNavbar({ state }) {
+function SubNavbar({ state, className }) {
+  const classes = cx('wrapper', {
+    [className]: className,
+  });
   return (
-    <div className={cx('wrapper')}>
+    <div className={classes}>
       <ul className={state.isShow ? cx('nav-sub') : cx('sub-nav-hidden')}>
         {state.list.map((category, index) => {
           return (

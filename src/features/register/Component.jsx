@@ -110,13 +110,20 @@ function RegisterComponent() {
         </div>
 
         <div className={cx('bottom')}>
-          <Button primary children="SIGN UP" rounded large />
+          <Button
+            primary
+            children="SIGN UP"
+            rounded
+            large
+            className={cx('btn-sign-up')}
+          />
           <div className={cx('sign-in')}>
             <Button
               text
               href="/login"
               children="Have a account? Sign in"
               style={{ color: '#000' }}
+              className={cx('btn-sign-in')}
             />
           </div>
         </div>

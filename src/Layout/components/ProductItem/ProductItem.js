@@ -4,13 +4,17 @@ import styles from './ProductItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function ProductItem({ product }) {
+function ProductItem({ product, className }) {
   const commas = (str) => {
     return str.replace(/.(?=(?:.{3})+$)/g, '$&.');
   };
 
+  const classes = cx('wrapper', {
+    [className]: className,
+  });
+
   return (
-    <div className={cx('wrapper')}>
+    <div className={classes}>
       <Link className={cx('container')} to={'/product-details/' + product.id}>
         {product.maxDiscount > 0 ? (
           <span className={cx('sale')}>On Sale {product.maxDiscount}%</span>

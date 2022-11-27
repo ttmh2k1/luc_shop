@@ -162,6 +162,12 @@ function ProfileComponent() {
           <span>Individual Information</span>
         </div>
         <div className={cx('content')}>
+          <div className={cx('avatar', 'left')}>
+            <img src={avatar ? avatar : DefaultAvatar} alt="" />
+            <div className={cx('upload')}>
+              <input type="file" onChange={handlePreviewAvatar} />
+            </div>
+          </div>
           <div className={cx('profile')}>
             <form onSubmit={(e) => updateProfile(e)}>
               <div className={cx('form-item')}>
@@ -329,7 +335,7 @@ function ProfileComponent() {
               </div>
             </form>
           </div>
-          <div className={cx('avatar')}>
+          <div className={cx('avatar', 'right')}>
             <img src={avatar ? avatar : DefaultAvatar} alt="" />
             <div className={cx('upload')}>
               <input type="file" onChange={handlePreviewAvatar} />

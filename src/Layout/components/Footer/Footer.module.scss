@@ -17,3 +17,25 @@
   flex-direction: column;
   gap: 2rem;
 }
+
+@media only screen and (min-device-width: 360px) {
+  .list-address,
+  .list-contacts {
+    font-size: 1rem;
+  }
+
+  .wrapper {
+    padding: 4rem 2rem;
+  }
+}
+
+@media only screen and (min-device-width: 768px) {
+  .list-address,
+  .list-contacts {
+    font-size: 1.6rem;
+  }
+
+  .wrapper {
+    padding: 4rem 8rem;
+  }
+}

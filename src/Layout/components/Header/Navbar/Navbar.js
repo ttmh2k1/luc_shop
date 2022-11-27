@@ -1,9 +1,11 @@
-import { useState, memo, useEffect } from 'react';
+import { useState, memo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Subnav from './Subnav';
 import * as categoryAPI from '~/api/categoryApi';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -39,7 +41,10 @@ function Navbar() {
     },
   ];
 
+  const menuBar = useRef();
+
   const [listCategories, setListCategories] = useState();
+  const [showMenu, setShowMenu] = useState(true);
 
   const [state, setState] = useState({
     subnavMen: false,
@@ -112,7 +117,40 @@ function Navbar() {
   };
 
   return (
-    <div onMouseOut={() => handleUnHover(1)}>
+    <div onMouseOut={() => handleUnHover(1)} className={cx('wrapper')}>
+      <div className={cx('menu')}>
+        <FontAwesomeIcon
+          icon={faBars}
+          className={cx('menu-icon')}
+          onClick={() => {
+            if (showMenu) {
+              menuBar.current.style.display = 'flex';
+              setTimeout(() => {
+                menuBar.current.style.transform = 'translateX(0)';
+                menuBar.current.style.opacity = '1';
+                menuBar.current.style.zIndex = '6';
+              }, 100);
+            } else {
+              menuBar.current.style.transform = 'translateX(2%)';
+              menuBar.current.style.opacity = '0';
+              menuBar.current.style.zIndex = '-1';
+              setTimeout(() => {
+                menuBar.current.style.display = 'none';
+              }, 300);
+            }
+            setShowMenu(!showMenu);
+          }}
+        />
+      </div>
+      <div className={cx('menu-bar')} ref={menuBar}>
+        {listItems.map((item, index) => {
+          return (
+            <div className={cx('menu-item')} key={index}>
+              <Link to={item.href}>{item.name}</Link>
+            </div>
+          );
+        })}
+      </div>
       <nav className={cx('nav')}>
         <ul className={cx('navbar')}>
           {listItems.map((item, index) => {
@@ -125,33 +163,39 @@ function Navbar() {
                 <li key={index} className={cx('item')}>
                   <Link to={item.href}>{item.name}</Link>
 
-                  {listCategories && index === 1 && (
-                    <Subnav
-                      state={{
-                        isShow: state.subnavMen,
-                        list: listCategories[0],
-                        href: '/men',
-                      }}
-                    ></Subnav>
-                  )}
-                  {listCategories && index === 2 && (
-                    <Subnav
-                      state={{
-                        isShow: state.subnavWomen,
-                        list: listCategories[1],
-                        href: '/women',
-                      }}
-                    ></Subnav>
-                  )}
-                  {listCategories && index === 3 && (
-                    <Subnav
-                      state={{
-                        isShow: state.subnavOther,
-                        list: listCategories[2],
-                        href: '/other',
-                      }}
-                    ></Subnav>
-                  )}
+                  <div className={cx('subnav')}>
+                    {listCategories && index === 1 && (
+                      <Subnav
+                        state={{
+                          isShow: state.subnavMen,
+                          list: listCategories[0],
+                          href: '/men',
+                        }}
+                      ></Subnav>
+                    )}
+                  </div>
+                  <div className={cx('subnav')}>
+                    {listCategories && index === 2 && (
+                      <Subnav
+                        state={{
+                          isShow: state.subnavWomen,
+                          list: listCategories[1],
+                          href: '/women',
+                        }}
+                      ></Subnav>
+                    )}
+                  </div>
+                  <div className={cx('subnav')}>
+                    {listCategories && index === 3 && (
+                      <Subnav
+                        state={{
+                          isShow: state.subnavOther,
+                          list: listCategories[2],
+                          href: '/other',
+                        }}
+                      ></Subnav>
+                    )}
+                  </div>
                 </li>
               </div>
             );

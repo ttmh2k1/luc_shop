@@ -73,6 +73,20 @@ function OrderItem({ item }) {
     }
   };
 
+  const createPayment = async (id) => {
+    const result = await orderAPI.createPayment(id);
+  };
+
+  const updateOrder = async (id) => {
+    const result = await orderAPI.updateOrder(id, {
+      newPaymentMethod: paymentMethod,
+    });
+
+    if (result) {
+      createPayment(id);
+    }
+  };
+
   const cancelOrder = async (id) => {
     const result = await orderAPI.cancelOrder(id);
     if (result) {
@@ -110,7 +124,13 @@ function OrderItem({ item }) {
     });
   };
 
-  const handlePayment = () => {};
+  const handlePayment = () => {
+    if (paymentMethod === item.paymentMethod) {
+      createPayment(item.id);
+    } else {
+      updateOrder(item.id);
+    }
+  };
 
   useEffect(() => {
     setPaymentMethod(
@@ -225,8 +245,7 @@ function OrderItem({ item }) {
                   onClick={() => handleCancel(item.id)}
                 />
               )}
-              {(status(item.status) === 'Delivered' ||
-                status(item.status) === 'Completed') && (
+              {status(item.status) === 'Delivered' && (
                 <Button
                   primary
                   children="Comment"

@@ -1,6 +1,14 @@
 .wrapper {
   width: 100%;
   min-width: 24rem;
+  position: relative;
+}
+
+.menu-bar {
+  padding: fixed;
+  top: 0;
+  left: 0;
+  width: 100vh;
 }
 
 .container {

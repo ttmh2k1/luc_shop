@@ -27,6 +27,10 @@ function OrderHistoryComponent() {
     getListOrder();
   }, []);
 
+  useEffect(() => {
+    setListOrderFilter(listOrder);
+  }, [listOrder]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
