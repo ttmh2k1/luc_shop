@@ -13,6 +13,8 @@ function Input({
   className,
   onChange,
   readOnly = false,
+  required = false,
+  maxLength = 200,
 }) {
   const classes = cx('input', {
     [className]: className,
@@ -20,6 +22,7 @@ function Input({
   const ref = useRef();
   return (
     <input
+      maxLength={maxLength}
       ref={ref}
       value={value ? value : ''}
       id={id}
@@ -32,6 +35,7 @@ function Input({
       }}
       onChange={onChange}
       readOnly={readOnly}
+      required={required}
     />
   );
 }

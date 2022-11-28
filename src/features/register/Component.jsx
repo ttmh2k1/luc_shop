@@ -55,6 +55,8 @@ function RegisterComponent() {
           value={fullname}
           className={cx('input')}
           onChange={(e) => setFullname(e.target.value)}
+          required={true}
+          maxLength={45}
         />
         <Input
           type="text"
@@ -62,6 +64,8 @@ function RegisterComponent() {
           value={username}
           className={cx('input')}
           onChange={(e) => setUsername(e.target.value)}
+          required={true}
+          maxLength={45}
         />
         <Input
           type="password"
@@ -69,6 +73,8 @@ function RegisterComponent() {
           value={password}
           className={cx('input')}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
+          maxLength={40}
         />
         <Input
           type="password"
@@ -76,6 +82,8 @@ function RegisterComponent() {
           value={confirm}
           className={cx('input')}
           onChange={(e) => setConfirm(e.target.value)}
+          required={true}
+          maxLength={40}
         />
         <Input
           type="email"
@@ -83,6 +91,8 @@ function RegisterComponent() {
           value={email}
           className={cx('input')}
           onChange={(e) => setEmail(e.target.value)}
+          required={true}
+          maxLength={50}
         />
 
         <div className={cx('radio-gender')}>

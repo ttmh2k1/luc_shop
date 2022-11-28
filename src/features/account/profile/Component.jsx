@@ -199,6 +199,7 @@ function ProfileComponent() {
                   className={cx('input')}
                   value={fullname}
                   onChange={(e) => setFullname(e.target.value)}
+                  maxLength={45}
                 />
               </div>
               <div className={cx('form-item')}>
@@ -210,6 +211,7 @@ function ProfileComponent() {
                     className={cx('input')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    maxLength={50}
                   />
                 ) : (
                   <span className={cx('username')}>{email}</span>
@@ -250,6 +252,7 @@ function ProfileComponent() {
                     type={'text'}
                     placeholder={'Phone number'}
                     className={cx('input')}
+                    maxLength={10}
                   />
                 ) : (
                   <span className={cx('username')}>{phone}</span>
@@ -320,6 +323,7 @@ function ProfileComponent() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     className={cx('input')}
+                    maxLength={6}
                   />
                   <Button
                     className={cx('btn')}

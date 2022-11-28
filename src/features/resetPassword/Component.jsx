@@ -76,12 +76,16 @@ function ResetPasswordComponent() {
           placeholder="New password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
+          maxLength={45}
         />
         <Input
           type="password"
           placeholder="Confirm password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
+          required={true}
+          maxLength={45}
         />
 
         <div style={{ marginTop: '2rem' }}>

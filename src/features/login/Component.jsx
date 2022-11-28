@@ -72,6 +72,8 @@ function LoginComponent() {
           onChange={(e) => {
             setUserName(e.target.value);
           }}
+          required={true}
+          maxLength={45}
         />
         <Input
           type="password"
@@ -80,6 +82,8 @@ function LoginComponent() {
           onChange={(e) => {
             setPassword(e.target.value);
           }}
+          required={true}
+          maxLength={40}
         />
         <div className={cx('under-content')}>
           <div className={cx('checkbox')}>
