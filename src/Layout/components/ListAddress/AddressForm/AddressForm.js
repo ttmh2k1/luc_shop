@@ -228,6 +228,7 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
               placeholder={'Address details'}
               value={addressDetail}
               onChange={(e) => setAddressDetail(e.target.value)}
+              required={true}
             />
           </div>
           <div className={cx('name')}>
@@ -236,6 +237,7 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
               placeholder={'Full name'}
               value={fullname}
               onChange={(e) => setFullname(e.target.value)}
+              maxLength={45}
             />
           </div>
           <div className={cx('phone')}>
@@ -244,6 +246,8 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
               placeholder={'Phone number'}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              maxLength={10}
+              required={true}
             />
           </div>
 

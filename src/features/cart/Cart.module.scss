@@ -121,6 +121,85 @@
 
 .new-address {
   position: absolute;
-  right: 42%;
+  right: 45%;
   top: 3rem;
+  display: flex;
+  align-items: center;
+  color: #000;
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.btn-new {
+  padding: 0;
+  min-width: 0;
+  width: 2rem !important;
+}
+
+@media only screen and (min-width: 360px) {
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .cart-details {
+    width: 100% !important;
+    border-left: none !important;
+  }
+
+  .new-address {
+    right: 5%;
+    top: 59.2%;
+  }
+
+  .children-btn {
+    display: none;
+  }
+
+  .left {
+    display: block;
+  }
+
+  .right {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    flex-direction: row;
+  }
+
+  .form {
+    width: 57.5% !important;
+    margin: 0 1.5% !important;
+  }
+
+  .cart-details {
+    width: 42.5% !important;
+    border-left: 2px solid #aaaaaa !important;
+  }
+
+  .new-address {
+    right: 45%;
+    top: 3rem;
+  }
+
+  .children-btn {
+    display: flex;
+  }
+
+  .left {
+    display: none;
+  }
+
+  .right {
+    display: block;
+  }
 }

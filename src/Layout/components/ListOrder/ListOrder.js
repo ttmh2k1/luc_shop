@@ -1,14 +1,10 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-
+import { useState, useEffect } from 'react';
 import OrderItem from './OrderItem';
 import classNames from 'classnames/bind';
 import styles from './ListOrder.module.scss';
 
 const cx = classNames.bind(styles);
-const ListOrder = () => {
-  const listOrder = useSelector((state) => state.user.listOrder).reverse();
-
+const ListOrder = ({ listOrder }) => {
   const [pageState, setPageState] = useState(0);
   const PAGE_SIZE = 3;
   const pageCount = listOrder.length / PAGE_SIZE;
@@ -28,6 +24,10 @@ const ListOrder = () => {
       return setPageState(pageCount);
     }
   };
+
+  useEffect(() => {
+    setPageState(0);
+  }, [listOrder]);
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>

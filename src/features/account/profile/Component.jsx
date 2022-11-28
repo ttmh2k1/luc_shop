@@ -162,6 +162,12 @@ function ProfileComponent() {
           <span>Individual Information</span>
         </div>
         <div className={cx('content')}>
+          <div className={cx('avatar', 'left')}>
+            <img src={avatar ? avatar : DefaultAvatar} alt="" />
+            <div className={cx('upload')}>
+              <input type="file" onChange={handlePreviewAvatar} />
+            </div>
+          </div>
           <div className={cx('profile')}>
             <form onSubmit={(e) => updateProfile(e)}>
               <div className={cx('form-item')}>
@@ -177,13 +183,13 @@ function ProfileComponent() {
                 ) : (
                   <span className={cx('username')}>{username}</span>
                 )}
-                {!editUsername && (
+                {/* {!editUsername && (
                   <FontAwesomeIcon
                     icon={faPen}
                     className={cx('icon')}
                     onClick={() => setEditUsername(true)}
                   />
-                )}
+                )} */}
               </div>
               <div className={cx('form-item')}>
                 <span className={cx('label')}>Full name</span>
@@ -193,6 +199,7 @@ function ProfileComponent() {
                   className={cx('input')}
                   value={fullname}
                   onChange={(e) => setFullname(e.target.value)}
+                  maxLength={45}
                 />
               </div>
               <div className={cx('form-item')}>
@@ -204,6 +211,7 @@ function ProfileComponent() {
                     className={cx('input')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    maxLength={50}
                   />
                 ) : (
                   <span className={cx('username')}>{email}</span>
@@ -244,6 +252,7 @@ function ProfileComponent() {
                     type={'text'}
                     placeholder={'Phone number'}
                     className={cx('input')}
+                    maxLength={10}
                   />
                 ) : (
                   <span className={cx('username')}>{phone}</span>
@@ -314,6 +323,7 @@ function ProfileComponent() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     className={cx('input')}
+                    maxLength={6}
                   />
                   <Button
                     className={cx('btn')}
@@ -329,7 +339,7 @@ function ProfileComponent() {
               </div>
             </form>
           </div>
-          <div className={cx('avatar')}>
+          <div className={cx('avatar', 'right')}>
             <img src={avatar ? avatar : DefaultAvatar} alt="" />
             <div className={cx('upload')}>
               <input type="file" onChange={handlePreviewAvatar} />

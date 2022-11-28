@@ -123,6 +123,8 @@ function VerifyComponent() {
             className={cx('input')}
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
+            required={true}
+            maxLength={6}
           />
           <Button
             primary

@@ -5,7 +5,12 @@ import Button from '~/components/Button';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { resetPassword } from '~/ActionCreators/UserCreator';
+import classNames from 'classnames/bind';
+import styles from './ForgotPassword.module.scss';
+import swal from 'sweetalert';
 //import cookies from 'react-cookies';
+
+const cx = classNames.bind(styles);
 
 function ForgotComponent() {
   const [phone, setPhone] = useState('');
@@ -14,10 +19,18 @@ function ForgotComponent() {
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('email', email);
-    localStorage.setItem('phone', phone);
-    dispatch(resetPassword(email, phone));
-    navigate('/verify');
+    if (email || phone) {
+      localStorage.setItem('email', email);
+      localStorage.setItem('phone', phone);
+      dispatch(resetPassword(email, phone));
+      navigate('/verify');
+    } else {
+      swal(
+        'Email and Phone is empty!',
+        'Please enter email or phone',
+        'warning',
+      );
+    }
   };
 
   return (
@@ -26,8 +39,10 @@ function ForgotComponent() {
       height="34rem"
       titleSize="3.2rem"
       onSubmit={(e) => handleSubmit(e)}
+      className={cx('form')}
     >
       <div
+        className={cx('form-content')}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -40,17 +55,19 @@ function ForgotComponent() {
           placeholder="Phone"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          required
+          className={cx('input')}
+          maxLength={10}
         />
         <Input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          className={cx('input')}
+          maxLength={45}
         />
 
-        <div style={{ marginTop: '2rem' }}>
+        <div style={{ marginTop: '2rem' }} className={cx('bottom')}>
           <Button primary children="VERIFY" rounded large />
           <div
             style={{ with: '100%', display: 'flex', justifyContent: 'center' }}

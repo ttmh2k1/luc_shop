@@ -41,11 +41,7 @@ function CommentItem({ comment }) {
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         <div className={cx('content')}>
-          <img
-            className={cx('img-avatar')}
-            src={comment.images[0].url}
-            alt=""
-          />
+          <img className={cx('img-avatar')} src={comment.buyerAvatar} alt="" />
           <div className={cx('comment-details')}>
             <span className={cx('customer-name')}>{comment.buyerUsername}</span>
             <span className={cx('date')}>{comment.time}</span>

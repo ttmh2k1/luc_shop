@@ -29,3 +29,15 @@
   letter-spacing: 0.2;
   color: #000;
 }
+
+@media only screen and (min-width: 360px) {
+  .container {
+    width: 34rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .container {
+    width: 70rem;
+  }
+}

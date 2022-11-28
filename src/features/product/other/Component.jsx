@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Menu from '~/Layout/components/Menu';
+import MenuFixed from '~/Layout/components/MenuFixed';
 import styles from './Other.module.scss';
 import * as categoryAPI from '~/api/categoryApi';
 import * as productAPI from '~/api/productApi';
@@ -60,6 +61,16 @@ function OtherComponent() {
         <div className={cx('menu')}>
           {categories.length > 0 && (
             <Menu
+              categories={categories}
+              id={id === 1 ? categories[0].id : id}
+              href="/other"
+              filter={{ point: sort, desc: desc }}
+            />
+          )}
+        </div>
+        <div className={cx('menu-fixed')}>
+          {categories.length > 0 && (
+            <MenuFixed
               categories={categories}
               id={id === 1 ? categories[0].id : id}
               href="/other"

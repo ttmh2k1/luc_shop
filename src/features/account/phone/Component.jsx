@@ -92,6 +92,7 @@ function PhoneComponent() {
                       className={cx('input')}
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
+                      maxLength={6}
                     />
                     <Button
                       primary

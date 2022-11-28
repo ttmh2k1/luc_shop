@@ -1,4 +1,5 @@
 import ListProduct from '~/Layout/components/ListProduct';
+import ProductSession from '~/Layout/components/PageProduct/ProductSession';
 import * as productAPI from '~/api/productApi';
 
 import { useEffect, useState } from 'react';
@@ -39,15 +40,40 @@ function HomeComponent() {
         <div className={cx('content')}>
           <div className={cx('on-sale')}>
             <h1 className={cx('title')}>ON SALE</h1>
-            {onSale.length > 0 && <ListProduct listProduct={onSale} />}
+            <div className={cx('list-product')}>
+              {onSale.length > 0 && <ListProduct listProduct={onSale} />}
+            </div>
+            <div className={cx('page-product')}>
+              {onSale.length > 0 && (
+                <ProductSession listProduct={onSale.slice(0, 4)} />
+              )}
+            </div>
           </div>
           <div className={cx('best-seller')}>
             <h1 className={cx('title')}>BEST SELLER</h1>
-            {bestSeller.length > 0 && <ListProduct listProduct={bestSeller} />}
+            <div className={cx('list-product')}>
+              {bestSeller.length > 0 && (
+                <ListProduct listProduct={bestSeller} />
+              )}
+            </div>
+            <div className={cx('page-product')}>
+              {bestSeller.length > 0 && (
+                <ProductSession listProduct={bestSeller.slice(0, 4)} />
+              )}
+            </div>
           </div>
           <div className={cx('new-arrival')}>
             <h1 className={cx('title')}>NEW ARRIVAL</h1>
-            {newArrival.length > 0 && <ListProduct listProduct={newArrival} />}
+            <div className={cx('list-product')}>
+              {newArrival.length > 0 && (
+                <ListProduct listProduct={newArrival} />
+              )}
+            </div>
+            <div className={cx('page-product')}>
+              {newArrival.length > 0 && (
+                <ProductSession listProduct={newArrival.slice(0, 4)} />
+              )}
+            </div>
           </div>
         </div>
       </div>

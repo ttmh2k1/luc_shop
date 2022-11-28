@@ -14,6 +14,7 @@ function Comment({ listComment = [] }) {
   const [commentState, setCommentState] = useState(false);
   const PAGE_SIZE = 6;
   const pageCount = listComment.length / PAGE_SIZE;
+  console.log(listComment);
 
   const handleClickNext = () => {
     if (pageState < pageCount - 1) {
@@ -33,35 +34,6 @@ function Comment({ listComment = [] }) {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
-        {/* <div className={cx('add-comment')}>
-          <Button
-            children={'Create new comment'}
-            text={true}
-            className={cx('btn')}
-            onClick={() => {
-              setCommentState(!commentState);
-            }}
-            rightIcon={
-              <FontAwesomeIcon icon={faCirclePlus} className={cx('icon')} />
-            }
-          />
-          <div
-            className={
-              commentState ? cx('background') : cx('background-hidden')
-            }
-            onClick={() => {
-              setCommentState(!commentState);
-            }}
-          ></div>
-          <div
-            className={
-              commentState ? cx('create-comment') : cx('comment-hidden')
-            }
-          >
-            <AddComment />
-          </div>
-        </div> */}
-
         <div className={cx('content')}>
           {listComment.length > 0 ? (
             <div className={cx('list-comment')}>

@@ -76,3 +76,19 @@
   border-radius: 1rem;
   height: 100%;
 }
+
+@media only screen and (min-width: 360px) {
+  .rating-row {
+    display: none;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .rating-row {
+    display: none;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .rating-row {
+    display: flex;
+  }
+}

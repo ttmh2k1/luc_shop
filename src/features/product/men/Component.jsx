@@ -6,6 +6,7 @@ import * as categoryAPI from '~/api/categoryApi';
 import * as productAPI from '~/api/productApi';
 import PageProduct from '~/Layout/components/PageProduct';
 import Menu from '~/Layout/components/Menu';
+import MenuFixed from '~/Layout/components/MenuFixed';
 
 const cx = classNames.bind(styles);
 
@@ -63,6 +64,16 @@ function MenComponent() {
         <div className={cx('menu')}>
           {categories.length > 0 && (
             <Menu
+              categories={categories}
+              id={id === 1 ? categories[0].id : id}
+              href="/men"
+              filter={{ point: sort, desc: desc }}
+            />
+          )}
+        </div>
+        <div className={cx('menu-fixed')}>
+          {categories.length > 0 && (
+            <MenuFixed
               categories={categories}
               id={id === 1 ? categories[0].id : id}
               href="/men"

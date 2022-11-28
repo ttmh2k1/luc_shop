@@ -35,3 +35,56 @@
 .half-active {
   color: rgb(255, 234, 0);
 }
+
+@media only screen and (min-width: 360px) {
+  .wrapper {
+    width: 30rem;
+  }
+  .customer-name {
+    font-size: 1.6rem;
+  }
+
+  .comment-details {
+    font-size: 1.2rem;
+  }
+
+  .comment {
+    font-size: 1.4rem;
+  }
+
+  .img-avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 5rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .wrapper {
+    width: 68rem;
+  }
+
+  .customer-name {
+    font-size: 1.6rem;
+  }
+
+  .comment-details {
+    font-size: 1.6rem;
+  }
+
+  .comment {
+    font-size: 1.8rem;
+  }
+
+  .img-avatar {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 5rem;
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  .wrapper {
+    width: 96rem;
+  }
+}
