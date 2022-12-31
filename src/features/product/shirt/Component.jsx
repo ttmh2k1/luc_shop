@@ -1,17 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import Menu from '~/Layout/components/Menu';
-import MenuFixed from '~/Layout/components/MenuFixed';
-import styles from './Other.module.scss';
+import styles from './Shirt.module.scss';
 import * as categoryAPI from '~/api/categoryApi';
 import * as productAPI from '~/api/productApi';
+import Menu from '~/Layout/components/Menu';
+import MenuFixed from '~/Layout/components/MenuFixed';
 import PageProduct from '~/Layout/components/PageProduct';
 
 const cx = classNames.bind(styles);
 
-function OtherComponent() {
+function ShirtComponent() {
   const [categories, setCategories] = useState([]);
+  console.log(
+    '🚀 ~ file: Component.jsx:15 ~ ShirtComponent ~ categories',
+    categories,
+  );
   const [products, setProducts] = useState([]);
   let { id } = useParams();
   let { sort } = useParams();
@@ -20,12 +24,15 @@ function OtherComponent() {
   id = parseInt(id);
   sort = parseInt(sort);
   desc = desc === 'true';
+
+  useEffect(() => {}, []);
+
   const getCategory = async () => {
-    const result = await categoryAPI.getCategoryById(34);
+    const result = await categoryAPI.getCategoryById(1);
     setCategories(() => {
       let list = [];
-      result.child.map((item) => {
-        item.child.map((category) => {
+      result?.children?.map((item) => {
+        item.children.map((category) => {
           list = [
             ...list,
             {
@@ -33,6 +40,11 @@ function OtherComponent() {
               name: category.name,
             },
           ];
+
+          console.log(
+            '🚀 ~ file: Component.jsx:37 ~ item.children.map ~ list',
+            list,
+          );
         });
       });
       getProduct(id === 1 ? list[0].id : id);
@@ -63,7 +75,7 @@ function OtherComponent() {
             <Menu
               categories={categories}
               id={id === 1 ? categories[0].id : id}
-              href="/other"
+              href="/men"
               filter={{ point: sort, desc: desc }}
             />
           )}
@@ -73,7 +85,7 @@ function OtherComponent() {
             <MenuFixed
               categories={categories}
               id={id === 1 ? categories[0].id : id}
-              href="/other"
+              href="/men"
               filter={{ point: sort, desc: desc }}
             />
           )}
@@ -86,4 +98,4 @@ function OtherComponent() {
   );
 }
 
-export default OtherComponent;
+export default ShirtComponent;

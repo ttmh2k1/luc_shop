@@ -25,7 +25,6 @@ function ProductDetails({ product, reviews }) {
                 maxPrice: product.maxPrice,
                 variations: product.variations,
                 description: product.description.slice(0, 1000) + '.',
-                tierVariations: product.tierVariations[0],
                 onSale: product.maxDiscount,
               }}
             />
@@ -40,12 +39,12 @@ function ProductDetails({ product, reviews }) {
               listRating={
                 product.totalRatingTimes > 0
                   ? [
-                      (product.rating5 / product.totalRatingTimes) * 100,
-                      (product.rating4 / product.totalRatingTimes) * 100,
-                      (product.rating3 / product.totalRatingTimes) * 100,
-                      (product.rating2 / product.totalRatingTimes) * 100,
-                      (product.rating1 / product.totalRatingTimes) * 100,
-                    ]
+                    (product.rating5 / product.totalRatingTimes) * 100,
+                    (product.rating4 / product.totalRatingTimes) * 100,
+                    (product.rating3 / product.totalRatingTimes) * 100,
+                    (product.rating2 / product.totalRatingTimes) * 100,
+                    (product.rating1 / product.totalRatingTimes) * 100,
+                  ]
                   : [0, 0, 0, 0, 0]
               }
             />

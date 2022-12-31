@@ -4,13 +4,14 @@ import ForgotPasswordPage from '../pages/login/forgotPassword';
 import ResetPasswordPage from '../pages/login/resetPassword';
 import VerifyPage from '../pages/login/verify';
 import HomePage from '../pages/home/home';
+import ShirtPage from '../pages/product/shirt'
+// import PantsPage from '../pages/product/pants'
 import MenPage from '../pages/product/men';
 import WomenPage from '../pages/product/women';
 import SalePage from '../pages/product/sale';
 import NewArrivalPage from '../pages/product/newArrival';
 import BestSellerPage from '../pages/product/bestSeller';
 import SearchPage from '../pages/product/search';
-import OtherPage from '../pages/other/other';
 import ProductDetailsPage from '../pages/productDetails/productDetails';
 import CartPage from '../pages/cart/cart';
 import ProfilePage from '../pages/account/profile';
@@ -47,17 +48,12 @@ const publicRoutes = [
     layout: BackgroundLayout,
   },
   { path: '/', component: HomePage, layout: HomeLayout },
-  { path: '/men/:id/:sort/:desc', component: MenPage, layout: DefaultLayout },
-  {
-    path: '/women/:id/:sort/:desc',
-    component: WomenPage,
-    layout: DefaultLayout,
-  },
-  {
-    path: '/other/:id/:sort/:desc',
-    component: OtherPage,
-    layout: DefaultLayout,
-  },
+  { path: '/shirt/:id/:sort/:desc', component: ShirtPage, layout: DefaultLayout },
+  // {
+  //   path: '/pants/:id/:sort/:desc',
+  //   component: PantsPage,
+  //   layout: DefaultLayout,
+  // },
   { path: '/sale', component: SalePage, layout: DefaultLayout },
   { path: '/new-arrival', component: NewArrivalPage, layout: DefaultLayout },
   { path: '/best-seller', component: BestSellerPage, layout: DefaultLayout },

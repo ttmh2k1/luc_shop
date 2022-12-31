@@ -10,25 +10,26 @@ export const getCart = async () => {
       },
     });
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const countCart = async () => {
   try {
-    const res = await request.get(endpoints['cart'] + '/count', {
+    const res = await request.get(endpoints['cart'] + '/quantity', {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const addToCart = async (id, quantity) => {
   try {
     const res = await request.post(
-      endpoints['cart'] + '/' + id,
+      endpoints['cart'],
       {
+        idProductVariation: id,
         quantity: quantity,
       },
 
@@ -41,7 +42,7 @@ export const addToCart = async (id, quantity) => {
       },
     );
     return res.success;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const removeCart = async (id) => {
@@ -53,7 +54,7 @@ export const removeCart = async (id) => {
       },
     });
     return res.success;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const updateCart = async (id, quantity) => {
@@ -71,5 +72,5 @@ export const updateCart = async (id, quantity) => {
       },
     );
     return res.success;
-  } catch (e) {}
+  } catch (e) { }
 };

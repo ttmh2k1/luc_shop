@@ -19,15 +19,16 @@ export let endpoints = {
   onSale: 'product/sale',
   getBestView: 'product/most-viewed',
   getNewArrival: 'product/lasted',
-  cart: 'buyer/cart-detail',
+  cart: '/buyer/cart-item',
   sourceAddress: 'address',
   notify: 'buyer/notification',
   comment: 'buyer/product-review',
+  feeShip: 'delivery-fee'
 };
 
 const request = axios.create({
   baseURL: 'http://localhost:8080/api/',
-  // baseURL: 'http://angry-garlics-end-203-113-147-184.loca.lt/api/',
+  // baseURL: 'http://warm-clocks-buy-171-232-236-246.loca.lt/api/',
 });
 
 export const get = async (path, options = []) => {

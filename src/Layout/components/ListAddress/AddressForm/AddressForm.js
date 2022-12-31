@@ -20,7 +20,9 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
     Ward: [{ value: 0, label: 'Ward' }],
   });
 
-  const listAddress = useSelector((state) => state.user.address);
+  const listAddress = useSelector((state) => {
+    return state.user.address
+  })
   const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
@@ -52,11 +54,6 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
 
     if (edit) {
       if (addressEdit) {
-        console.log('get list city ', options);
-        console.log(
-          'id city ',
-          addressEdit.addressWard.district.provinceCity.id,
-        );
         setCity(addressEdit.addressWard.district.provinceCity.id);
         setFullname(addressEdit.receiverName);
       }
@@ -80,8 +77,6 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
 
     if (edit) {
       if (addressEdit) {
-        console.log('get list district ', options);
-        console.log('id district ', addressEdit.addressWard.district.id);
         setDistrict(addressEdit.addressWard.district.id);
         setPhone(addressEdit.receiverPhone);
       }
@@ -104,8 +99,6 @@ const AddressForm = ({ title = '', edit = false, addressEdit }) => {
 
     if (edit) {
       if (addressEdit) {
-        console.log('get list ward ', options);
-        console.log('id ward ', addressEdit.addressWard.id);
         setWard(addressEdit.addressWard.id);
         setAddressDetail(addressEdit.addressDetail);
       }

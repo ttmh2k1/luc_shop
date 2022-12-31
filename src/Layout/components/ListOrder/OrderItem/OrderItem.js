@@ -96,9 +96,9 @@ function OrderItem({ item }) {
           listOrder.map((order) =>
             order.id === item.id
               ? {
-                  ...order,
-                  status: 'CANCELLED',
-                }
+                ...order,
+                status: 'CANCELLED',
+              }
               : order,
           ),
         ),
@@ -168,21 +168,21 @@ function OrderItem({ item }) {
               return (
                 <div className={cx('content-order')} key={index}>
                   <div className={cx('product')}>
-                    <img src={product.productVariation.product.avatar} alt="" />
+                    <img src={product?.variation?.product.avatar} alt="" />
                   </div>
                   <div className={cx('product-details')}>
                     <span className={cx('name')}>
-                      {product.productVariation.product.name
+                      {product?.variation?.product.name
                         .split(' ')
                         .filter((order, index) => index < 4)
                         .join(' ')}
                     </span>
                     <span className={cx('color')}>
-                      {product.productVariation.tier
-                        ? product.productVariation.tier
+                      {/* {product.variation
+                        ? product.variation
                         : 'Variation'}
-                      {':   '}
-                      {product.productVariation.variationName}
+                      {':   '} */}
+                      {product.variation.name}
                     </span>
                     <span className={cx('quantity')}>x{product.quantity}</span>
                   </div>
@@ -190,15 +190,15 @@ function OrderItem({ item }) {
                     <div className={cx('price')}>
                       <span
                         className={
-                          product.productVariation.discount > 0
+                          product.variation.discount > 0
                             ? cx('old-price')
                             : cx('')
                         }
                       >
-                        {commas(product.productVariation.price + '')}
+                        {commas(product.variation.price + '')}
                         VND
                       </span>
-                      {product.productVariation.discount > 0 && (
+                      {product.variation.discount > 0 && (
                         <span className={cx('sale-price')}>
                           {commas(product.unitPrice * product.quantity + '')}{' '}
                           VND
@@ -210,11 +210,35 @@ function OrderItem({ item }) {
               );
             })}
           </div>
+          <div className={cx('total-group')} style={{
+            borderTop: '0.1rem solid #aaa'
+          }}>
+            <span className={cx('label')}>Price:</span>
+            <span className={cx('value')}>
+              {commas(item.price + '')} VND
+            </span>
+          </div>
+          {item.discount && (<>
+            <div className={cx('total-group')}>
+              <span className={cx('label')}>Discount:</span>
+              <span className={cx('value')}>-
+                {commas((item.price * item.discount / 100).toFixed(0) + '')} VND
+              </span>
+            </div>
+          </>)}
 
-          <div className={cx('total')}>
+          <div className={cx('total-group')}>
+            <span className={cx('label')}>Ship:</span>
+            <span className={cx('value')}>
+              {commas(item.shipPrice + '')} VND
+            </span>
+          </div>
+          <div className={cx('total-group')} style={{
+            borderTop: '0.1rem solid #aaa'
+          }}>
             <span className={cx('label')}>Total:</span>
             <span className={cx('value')}>
-              {commas(item.payPrice + '')} VND
+              {commas(item.totalPrice + '')} VND
             </span>
           </div>
           <div className={cx('bottom')}>
@@ -238,13 +262,13 @@ function OrderItem({ item }) {
               {(status(item.status) === 'Paying' ||
                 status(item.status) === 'Confirming' ||
                 status(item.status) === 'Sending') && (
-                <Button
-                  primary
-                  children="Cancel"
-                  className={cx('btn-order')}
-                  onClick={() => handleCancel(item.id)}
-                />
-              )}
+                  <Button
+                    primary
+                    children="Cancel"
+                    className={cx('btn-order')}
+                    onClick={() => handleCancel(item.id)}
+                  />
+                )}
               {status(item.status) === 'Delivered' && (
                 <Button
                   primary

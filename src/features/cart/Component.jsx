@@ -117,7 +117,7 @@ function CartComponent() {
 
     const result = await orderAPI.addOrderByCart({
       note: note,
-      idAddress: address,
+      idDeliveryAddress: address,
       paymentMethod: payment,
       idProductVariations: idProductVariations,
     });
@@ -154,6 +154,15 @@ function CartComponent() {
     if (selectAddress) {
       setName(selectAddress.receiverName);
       setPhone(selectAddress.receiverPhone);
+      setAddress(selectAddress.id);
+    }
+  };
+
+  const totalFeeShip = (id) => {
+    setAddress(id);
+    const selectAddress = listAddress.find((item) => item.id === parseInt(id));
+    if (selectAddress) {
+      setAddress(selectAddress.id);
     }
   };
 
@@ -251,6 +260,7 @@ function CartComponent() {
                 select={address}
                 onChange={(e) => {
                   changeAddress(e.target.value);
+                  localStorage.setItem('fee-ship', e.target.value);
                 }}
               />
             </div>

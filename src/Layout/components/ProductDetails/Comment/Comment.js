@@ -14,7 +14,6 @@ function Comment({ listComment = [] }) {
   const [commentState, setCommentState] = useState(false);
   const PAGE_SIZE = 6;
   const pageCount = listComment.length / PAGE_SIZE;
-  console.log(listComment);
 
   const handleClickNext = () => {
     if (pageState < pageCount - 1) {
