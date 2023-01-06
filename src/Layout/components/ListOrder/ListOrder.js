@@ -34,14 +34,6 @@ const ListOrder = ({ listOrder }) => {
         {listOrder
           .slice(pageState * PAGE_SIZE, pageState * PAGE_SIZE + PAGE_SIZE)
           .map((item, index) => {
-            console.log('pageState ', pageState);
-            console.log(
-              'list :',
-              listOrder.slice(
-                pageState * PAGE_SIZE,
-                pageState * PAGE_SIZE + PAGE_SIZE,
-              ),
-            );
             return (
               <div className={cx('order')} key={item.id}>
                 <OrderItem item={item} />

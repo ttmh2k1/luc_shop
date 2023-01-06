@@ -10,7 +10,6 @@ import SalePage from '../pages/product/sale';
 import NewArrivalPage from '../pages/product/newArrival';
 import BestSellerPage from '../pages/product/bestSeller';
 import SearchPage from '../pages/product/search';
-import OtherPage from '../pages/other/other';
 import ProductDetailsPage from '../pages/productDetails/productDetails';
 import CartPage from '../pages/cart/cart';
 import ProfilePage from '../pages/account/profile';
@@ -51,11 +50,6 @@ const publicRoutes = [
   {
     path: '/women/:id/:sort/:desc',
     component: WomenPage,
-    layout: DefaultLayout,
-  },
-  {
-    path: '/other/:id/:sort/:desc',
-    component: OtherPage,
     layout: DefaultLayout,
   },
   { path: '/sale', component: SalePage, layout: DefaultLayout },

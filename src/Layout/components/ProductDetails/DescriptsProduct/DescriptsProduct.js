@@ -12,6 +12,7 @@ import styles from './DescriptsProduct.module.scss';
 const cx = classNames.bind(styles);
 
 function DescriptsProduct({ product = {} }) {
+
   const dispatch = useDispatch();
 
   const commas = (str) => {
@@ -73,6 +74,7 @@ function DescriptsProduct({ product = {} }) {
     key: -1,
     id: -1,
   });
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -85,33 +87,48 @@ function DescriptsProduct({ product = {} }) {
                   .filter((item, index) => index < 10)
                   .join(' ') + '.'}
               </span>
-              {product.onSale > 0 ? (
-                <div className={cx('onSale')}>
-                  <span className={cx('label')}>
-                    On Sale {product.onSale}%:{' '}
-                  </span>
-                  <span className={cx('old-price')}>
-                    {commas(
-                      (
-                        (product.minPrice * 100) /
-                        (100 - product.onSale)
-                      ).toFixed(0) + '',
-                    )}{' '}
-                    VND
-                  </span>
-                </div>
-              ) : (
-                <div></div>
-              )}
+
+              <div className={cx('onSale')}>
+                {state.key > -1 ? (
+                  <>
+                    {product.variations[state.key].discount > 0 ? (
+                      <>
+                        <span className={cx('label')}>
+                          On Sale {product.variations[state.key].discount}%
+                        </span>
+                        <span className={cx('old-price')}>
+                          {commas(product.variations[state.key].price + '')}VND
+                        </span>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <span className={cx('label')}>
+                      On Sale {product.onSale}%:
+                    </span>
+                    <span className={cx('old-price')}>
+                      {commas(
+                        (
+                          (product.minPrice * 100) /
+                          (100 - product.onSale)
+                        ).toFixed(0) + '',
+                      )}
+                      VND
+                    </span>
+                  </>
+                )}
+              </div>
+
               <div className={cx('price')}>
                 {state.key > -1 ? (
                   <span>
                     {commas(
-                      (
-                        product.variations[state.key].price *
-                        (1 - product.onSale / 100)
-                      ).toFixed(0) + '',
-                    ) + ' VND'}
+                      product.variations[state.key].priceAfterDiscount + '',
+                    )}
+                    VND
                   </span>
                 ) : (
                   <div className={cx('price-normal')}>
@@ -133,16 +150,7 @@ function DescriptsProduct({ product = {} }) {
             </div>
 
             <div className={cx('variations')}>
-              <span className={cx('label')}>
-                {product.tierVariations ? product.tierVariations : 'Variations'}
-                :
-                {state > -1 &&
-                  '  ' +
-                  product.variations[state.key].variationName
-                    .split(' ')
-                    .filter((item, index) => index < 5)
-                    .join(' ')}
-              </span>
+              <span className={cx('label')}>Variations</span>
               <div className={cx('options')}>
                 {product.variations.map((item, index) => {
                   return (
@@ -164,7 +172,7 @@ function DescriptsProduct({ product = {} }) {
                         )
                       }
                     >
-                      <span>{item.variationName}</span>
+                      <span>{item.name}</span>
                     </div>
                   );
                 })}

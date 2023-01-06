@@ -58,8 +58,7 @@ function SearchComponent() {
                 CAN'T FIND THE PRODUCT MATCH THAT!!!
               </span>
               <span className={cx('notify-content')}>
-                Please search by other name or description of product. Or you
-                can go to another side such as HOME, WOMEN, MEN.
+                Please search by other name or description of product.
               </span>
               <span className={cx('thank')}>THANK YOU!</span>
             </div>

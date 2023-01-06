@@ -88,12 +88,12 @@
   border-radius: 5rem;
   padding: 1rem 4rem;
 }
-
 @media only screen and (min-width: 360px) {
   .wrapper {
     width: 32rem;
     margin: 6rem 0;
     margin-left: 3rem;
+    padding: 2rem 1rem;
   }
 
   .content {
@@ -105,12 +105,31 @@
     min-width: 6rem;
     margin-right: 1rem;
   }
+
+  .input {
+    width: 20rem;
+  }
+
+  .verify {
+    padding: 1rem 0;
+  }
+
+  .btn {
+    font-size: 1.2rem;
+    min-width: 0;
+    padding: 1rem;
+  }
+
+  .value {
+    padding: 1rem 2rem;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .wrapper {
     width: 56rem;
     margin: 6rem 12rem;
+    padding: 2rem 3rem;
   }
 
   .content {
@@ -122,12 +141,31 @@
     min-width: 14rem;
     margin-right: 1rem;
   }
+
+  .input {
+    width: 40rem;
+  }
+
+  .verify {
+    padding: 1rem 0;
+  }
+
+  .btn {
+    font-size: 1.2rem;
+    min-width: 0;
+    padding: 1rem;
+  }
+
+  .value {
+    padding: 1rem 2rem;
+  }
 }
 
 @media only screen and (min-width: 1280px) {
   .wrapper {
     width: 100rem;
     margin: 4rem 0;
+    padding: 2rem 3rem;
   }
 
   .content {
@@ -138,5 +176,23 @@
   .label {
     min-width: 14rem;
     margin-right: 2rem;
+  }
+
+  .input {
+    width: 40rem;
+  }
+
+  .verify {
+    padding: 1rem 4rem;
+  }
+
+  .btn {
+    font-size: 1.6rem;
+    min-width: 100px;
+    padding: 1rem 2.8rem;
+  }
+
+  .value {
+    padding: 1rem 4rem;
   }
 }

@@ -4,14 +4,14 @@ import { endpoints } from '~/utils/request';
 
 export const getOrder = async () => {
   try {
-    const res = await request.get(endpoints['order'], {
+    const res = await request.get(endpoints['order'] + '?size=1000', {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const getOrderById = async (id) => {
@@ -23,7 +23,7 @@ export const getOrderById = async (id) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const addOrder = async (obj = {}) => {
@@ -35,7 +35,7 @@ export const addOrder = async (obj = {}) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const addOrderByCart = async (obj = {}) => {
@@ -47,13 +47,13 @@ export const addOrderByCart = async (obj = {}) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const cancelOrder = async (id) => {
   try {
     const res = await request.put(
-      endpoints['order'] + '/cancel/' + id,
+      endpoints['order'] + '/' + id + '/cancel',
       {},
       {
         headers: {
@@ -63,7 +63,7 @@ export const cancelOrder = async (id) => {
     );
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const updateOrder = async (id, data) => {
@@ -78,7 +78,7 @@ export const updateOrder = async (id, data) => {
       },
     );
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const createPayment = async (id) => {
@@ -92,5 +92,5 @@ export const createPayment = async (id) => {
       },
     );
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };

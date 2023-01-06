@@ -26,7 +26,7 @@ function CartItem({ product = {}, indexList }) {
   const [quantity, setQuantity] = useState(product.quantity);
 
   const changeQuantity = (quantity) => {
-    if (updateCart(product.productVariation.id, quantity)) {
+    if (updateCart(product.productVariation.product.id, quantity)) {
       dispatch(updateCount(count - (product.quantity - quantity)));
       dispatch(
         update(
@@ -45,21 +45,21 @@ function CartItem({ product = {}, indexList }) {
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         <div className={cx('image')}>
-          <img src={product.productDetail.avatar} alt="" />
+          <img src={product?.productVariation?.product?.avatar} alt="" />
           <div className={cx('count')}>
             <span>{quantity}</span>
           </div>
         </div>
         <div className={cx('content')}>
           <div className={cx('name')}>
-            {product.productDetail.name
+            {product.productVariation.product.name
               .split(' ')
               .filter((item, index) => index < 4)
               .join(' ')}
           </div>
           <div className={cx('color')}>
             <span className={cx('title-color')}>
-              {product.productVariation.variationName
+              {product.productVariation.product.name
                 .split(' ')
                 .filter((item, index) => index < 6)
                 .join(' ')}

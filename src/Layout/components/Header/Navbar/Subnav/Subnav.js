@@ -13,7 +13,7 @@ function SubNavbar({ state, className }) {
   return (
     <div className={classes}>
       <ul className={state.isShow ? cx('nav-sub') : cx('sub-nav-hidden')}>
-        {state.list.map((category, index) => {
+        {state.list?.map((category, index) => {
           return (
             <ul className={cx('categories')} key={index}>
               <Link
@@ -22,7 +22,7 @@ function SubNavbar({ state, className }) {
               >
                 {category.name}
               </Link>
-              {category.listCategory.map((item, index) => {
+              {category?.listCategory?.map((item, index) => {
                 return (
                   <li className={cx('category')} key={index}>
                     <Link

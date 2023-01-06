@@ -11,7 +11,7 @@ export const getAddress = async () => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const getAddressById = async (id) => {
@@ -23,7 +23,7 @@ export const getAddressById = async (id) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const addAddress = async (obj = {}) => {
@@ -35,7 +35,7 @@ export const addAddress = async (obj = {}) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const updateAddress = async (id, obj = {}) => {
@@ -47,7 +47,7 @@ export const updateAddress = async (id, obj = {}) => {
     });
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const deleteAddress = async (id) => {
@@ -59,7 +59,7 @@ export const deleteAddress = async (id) => {
     });
 
     return res.success;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const getAllCity = async () => {
@@ -67,7 +67,7 @@ export const getAllCity = async () => {
     const res = await request.get(endpoints['sourceAddress']);
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const getDistrictOfCity = async (id) => {
@@ -77,7 +77,7 @@ export const getDistrictOfCity = async (id) => {
     );
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
 
 export const getWardOfDistrict = async (id) => {
@@ -87,5 +87,16 @@ export const getWardOfDistrict = async (id) => {
     );
 
     return res.data;
-  } catch (e) {}
+  } catch (e) { }
 };
+
+export const getFeeShip = async (id) => {
+  try {
+    const res = await request.get(
+      endpoints['feeShip'] + "/" + id,
+    );
+    return res;
+  } catch (e) {
+    throw e
+  }
+}

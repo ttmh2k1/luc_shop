@@ -7,15 +7,33 @@ import * as cartAPI from '~/api/cartApi';
 import swal from 'sweetalert';
 import classNames from 'classnames/bind';
 import styles from './ListCartItem.module.scss';
+import { getFeeShip } from '~/api/addressApi';
 const cx = classNames.bind(styles);
 
 function ListCartItem() {
+  const [fee, setFee] = useState();
+
+  const user = useSelector((state) => state.user.user);
+
   const commas = (str) => {
     return str.replace(/.(?=(?:.{3})+$)/g, '$&.');
   };
-  const cart = useSelector((state) => state.cart.cart);
+  const cart = useSelector((state) => {
+    return state.cart.cart;
+  });
   const count = useSelector((state) => state.cart.count);
   const dispatch = useDispatch();
+
+  const idAddress = localStorage.getItem('fee-ship');
+
+  const handleGetFeeShip = async () => {
+    const data = await getFeeShip(idAddress);
+    setFee(data.fee);
+  };
+
+  useEffect(() => {
+    handleGetFeeShip();
+  }, [idAddress]);
 
   const total = cart
     .map(
@@ -120,20 +138,26 @@ function ListCartItem() {
         <div className={cx('description')}>
           <div className={cx('des-item')}>
             <span className={cx('label')}>Temporary</span>
-            <span className={cx('value')}>{commas(total + '')} VND</span>
+            <span className={cx('value')}>{commas(total.toFixed(0) + '')} VND</span>
           </div>
           <div className={cx('des-item')}>
             <span className={cx('label')}>Discount</span>
-            <span className={cx('value')}>0.0 VND</span>
+            <span className={cx('value')}>- {commas((total * user?.rank?.discountRate / 100).toFixed(0) + '')} VND</span>
           </div>
           <div className={cx('des-item')}>
-            <span className={cx('label')}>Delivery Fee</span>
-            <span className={cx('value')}>30.000 VND</span>
+            {fee ? (
+              <>
+                <span className={cx('label')}>Delivery Fee</span>
+                <span className={cx('value')}>{commas(fee.toFixed(0) + '')} VND</span>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className={cx('total')}>
           <span className={cx('label')}>Total</span>
-          <span className={cx('value')}>{commas(total + 30000 + '')} VND</span>
+          <span className={cx('value')}>{commas((total * (1 - user?.rank?.discountRate / 100) + fee).toFixed(0) + '')} VND</span>
         </div>
       </div>
     </div>

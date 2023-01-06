@@ -24,8 +24,8 @@ function WomenComponent() {
     const result = await categoryAPI.getCategoryById(33);
     setCategories(() => {
       let list = [];
-      result.child.map((item) => {
-        item.child.map((category) => {
+      result?.children?.map((item) => {
+        item?.children?.map((category) => {
           list = [
             ...list,
             {

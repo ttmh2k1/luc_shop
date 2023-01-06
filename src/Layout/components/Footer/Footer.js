@@ -12,33 +12,25 @@ function Footer() {
             <li className={cx('address-item')}>
               1 Võ Văn Ngân, Thủ Đức, TP Hồ Chí Minh
             </li>
+
             <li className={cx('address-item')}>
-              1 Võ Văn Ngân, Thủ Đức, TP Hồ Chí Minh
-            </li>
-            <li className={cx('address-item')}>
-              1 Võ Văn Ngân, Thủ Đức, TP Hồ Chí Minh
-            </li>
-            <li className={cx('address-item')}>
-              1 Võ Văn Ngân, Thủ Đức, TP Hồ Chí Minh
-            </li>
-            <li className={cx('address-item')}>
-              1 Võ Văn Ngân, Thủ Đức, TP Hồ Chí Minh
+              Trang web thương mại điện tử mua bán quần áo và các mặt hàng liên quan
             </li>
           </ul>
         </div>
         <div className={cx('contacts')}>
           <ul className={cx('list-contacts')}>
             <li className={cx('contact-item')}>
-              Email: 19110386@student.hcmute.edu.vn
+              Lê Trần Thanh Hân
             </li>
             <li className={cx('contact-item')}>
-              Email: 19110386@student.hcmute.edu.vn
+              Email: 19110360@student.hcmute.edu.vn
             </li>
             <li className={cx('contact-item')}>
-              Email: 19110386@student.hcmute.edu.vn
+              Trần Thị Mỹ Huyền
             </li>
             <li className={cx('contact-item')}>
-              Email: 19110386@student.hcmute.edu.vn
+              Email: 19110371@student.hcmute.edu.vn
             </li>
           </ul>
         </div>

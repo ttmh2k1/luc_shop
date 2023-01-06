@@ -16,16 +16,12 @@ function Navbar() {
       href: '/',
     },
     {
-      name: 'Men',
-      href: '/men/1/0/0',
-    },
-    {
-      name: 'Women',
+      name: 'Áo',
       href: '/women/1/0/0',
     },
     {
-      name: 'Other',
-      href: '/other/1/0/0',
+      name: 'Quần',
+      href: '/men/1/0/0',
     },
     {
       name: 'Sale',
@@ -56,13 +52,11 @@ function Navbar() {
     const result = await categoryAPI.getCategories();
     setListCategories(() => {
       const list = result.map((item) => {
-        return item.child.map((category) => {
+        return item.children.map((category) => {
           return {
             id: category.id,
             name: category.name,
-            listCategory: category.child.map((child) => {
-              return { id: child.id, name: child.name };
-            }),
+            listCategory: category.children
           };
         });
       });
@@ -113,7 +107,7 @@ function Navbar() {
       });
     }
 
-    return () => {};
+    return () => { };
   };
 
   return (
@@ -150,6 +144,7 @@ function Navbar() {
             </div>
           );
         })}
+
       </div>
       <nav className={cx('nav')}>
         <ul className={cx('navbar')}>
@@ -172,6 +167,7 @@ function Navbar() {
                           href: '/men',
                         }}
                       ></Subnav>
+
                     )}
                   </div>
                   <div className={cx('subnav')}>
@@ -181,17 +177,6 @@ function Navbar() {
                           isShow: state.subnavWomen,
                           list: listCategories[1],
                           href: '/women',
-                        }}
-                      ></Subnav>
-                    )}
-                  </div>
-                  <div className={cx('subnav')}>
-                    {listCategories && index === 3 && (
-                      <Subnav
-                        state={{
-                          isShow: state.subnavOther,
-                          list: listCategories[2],
-                          href: '/other',
                         }}
                       ></Subnav>
                     )}

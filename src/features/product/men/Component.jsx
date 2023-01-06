@@ -27,8 +27,8 @@ function MenComponent() {
     const result = await categoryAPI.getCategoryById(32);
     setCategories(() => {
       let list = [];
-      result.child.map((item) => {
-        item.child.map((category) => {
+      result?.children?.map((item) => {
+        item?.children?.map((category) => {
           list = [
             ...list,
             {
